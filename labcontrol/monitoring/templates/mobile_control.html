@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Lab Control</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+background:#111;
+color:white;
+font-family:Arial;
+text-align:center;
+margin:0;
+}
+
+h1{
+background:#000;
+padding:15px;
+margin:0;
+}
+
+.pcbox{
+background:#222;
+padding:15px;
+margin:10px;
+border-radius:10px;
+}
+
+button{
+padding:10px;
+margin:5px;
+border:none;
+border-radius:6px;
+font-size:15px;
+}
+
+.lock{background:red;color:white;}
+.unlock{background:green;color:white;}
+.internetoff{background:orange;color:black;}
+.interneton{background:cyan;color:black;}
+
+.online{color:#00ff00;}
+.offline{color:red;}
+
+.alertbox{
+background:#300;
+margin:10px;
+padding:10px;
+border-radius:8px;
+}
+
+input{
+padding:8px;
+border-radius:6px;
+border:none;
+margin:5px;
+}
+
+.addsite{
+background:#0a84ff;
+color:white;
+}
+
+</style>
+
+<script>
+
+// auto refresh page every 5 seconds
+setTimeout(function(){
+location.reload();
+},5000);
+
+</script>
+
+</head>
+
+<body>
+
+<h1>📱 LAB CONTROL</h1>
+
+
+<!-- ============================= -->
+<!-- ALERTS -->
+<!-- ============================= -->
+
+<div class="alertbox">
+
+<h3>⚠ Alerts</h3>
+
+<ul id="alerts"></ul>
+
+</div>
+
+
+<!-- ============================= -->
+<!-- ALLOWED WEBSITE CONTROL -->
+<!-- ============================= -->
+
+<div class="pcbox">
+
+<h3>Allow Website</h3>
+
+<input id="site" placeholder="example.com">
+
+<button class="addsite" onclick="addSite()">Add</button>
+
+</div>
+
+
+<!-- ============================= -->
+<!-- PC CONTROL -->
+<!-- ============================= -->
+
+{% for pc in pcs %}
+
+<div class="pcbox">
+
+<h3>{{ pc.name }}</h3>
+
+<p>{{ pc.ip }}</p>
+
+{% if pc.status == "Online" %}
+<p class="online">🟢 Online</p>
+{% else %}
+<p class="offline">🔴 Offline</p>
+{% endif %}
+
+<a href="/set-command/?pc={{ pc.ip }}&cmd=lock">
+<button class="lock">Lock</button>
+</a>
+
+<a href="/set-command/?pc={{ pc.ip }}&cmd=unlock">
+<button class="unlock">Unlock</button>
+</a>
+
+<a href="/set-command/?pc={{ pc.ip }}&cmd=internet_off">
+<button class="internetoff">Internet OFF</button>
+</a>
+
+<a href="/set-command/?pc={{ pc.ip }}&cmd=internet_on">
+<button class="interneton">Internet ON</button>
+</a>
+
+</div>
+
+{% endfor %}
+
+
+<script>
+
+function addSite(){
+
+var site=document.getElementById("site").value;
+
+fetch("/update-settings/?site="+site)
+.then(r=>r.json())
+.then(data=>alert("Website allowed"));
+
+}
+
+
+// fetch alerts from server
+function loadAlerts(){
+
+fetch("/get-alerts/")
+.then(r=>r.json())
+.then(data=>{
+
+let box=document.getElementById("alerts");
+
+box.innerHTML="";
+
+data.alerts.forEach(a=>{
+
+let li=document.createElement("li");
+
+li.innerText=a;
+
+box.appendChild(li);
+
+});
+
+});
+
+}
+
+loadAlerts();
+
+</script>
+
+</body>
+</html>

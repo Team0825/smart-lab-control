@@ -1,0 +1,33 @@
+<h1>Teacher Lab Control</h1>
+
+<h2>Global Control</h2>
+
+<a href="/set-command/?pc=all&cmd=lock">
+<button>LOCK ALL PCs</button>
+</a>
+
+<a href="/set-command/?pc=all&cmd=unlock">
+<button>UNLOCK ALL PCs</button>
+</a>
+
+<hr>
+
+<h2>Individual PC Control</h2>
+
+{% for i in range(101,131) %}
+
+<div style="margin:10px">
+
+PC{{i}}
+
+<a href="/set-command/?pc=PC{{i}}&cmd=lock">
+<button>Lock</button>
+</a>
+
+<a href="/set-command/?pc=PC{{i}}&cmd=unlock">
+<button>Unlock</button>
+</a>
+
+</div>
+
+{% endfor %}

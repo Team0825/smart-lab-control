@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="refresh" content="5">
+<title>Lab Network Monitor</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#111;
+color:white;
+text-align:center;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(6,1fr);
+gap:20px;
+padding:30px;
+}
+
+.pc{
+padding:20px;
+border-radius:10px;
+font-size:18px;
+font-weight:bold;
+}
+
+.online{
+background:#2ecc71;
+}
+
+.offline{
+background:#e74c3c;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>LAB PC MONITOR</h1>
+
+<div class="grid">
+
+{% for pc in pcs %}
+
+<div class="pc {% if pc.status == 'Online' %}online{% else %}offline{% endif %}">
+
+{{ pc.ip }} <br>
+
+{% if pc.status == "Online" %}
+🟢 ONLINE
+{% else %}
+🔴 OFFLINE
+{% endif %}
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Successful</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+background:linear-gradient(90deg,#fff7ad,#ffa9f9);
+}
+
+.success-container{
+background:rgba(255,255,255,0.35);
+backdrop-filter:blur(12px);
+padding:50px;
+border-radius:18px;
+box-shadow:0 20px 40px rgba(0,0,0,0.2);
+width:420px;
+text-align:center;
+}
+
+.success-container h2{
+font-size:28px;
+color:#222;
+margin-bottom:20px;
+}
+
+.success-container p{
+font-size:18px;
+color:#333;
+margin-bottom:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="success-container">
+
+<h2>Welcome {{ student.name }}</h2>
+
+<p>You are successfully logged in.</p>
+
+<p>You can now start working on your PC.</p>
+
+</div>
+
+</body>
+</html>

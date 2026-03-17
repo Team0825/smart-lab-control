@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Lab Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+background:linear-gradient(90deg,#fff7ad,#ffa9f9);
+position:relative;
+}
+
+/* ADMIN ICON */
+
+.admin{
+position:absolute;
+top:20px;
+right:25px;
+font-size:28px;
+color:black;
+text-decoration:none;
+transition:0.3s;
+}
+
+.admin:hover{
+transform:scale(1.2);
+}
+
+/* LOGIN BOX */
+
+.login-container{
+background:rgba(255,255,255,0.35);
+backdrop-filter:blur(12px);
+padding:50px;
+border-radius:18px;
+box-shadow:0 20px 40px rgba(0,0,0,0.2);
+width:380px;
+text-align:center;
+}
+
+/* TEXT */
+
+.login-container h2{
+font-size:28px;
+margin-bottom:10px;
+color:#222;
+}
+
+.login-container p{
+font-size:14px;
+margin-bottom:35px;
+color:#444;
+}
+
+/* INPUT */
+
+.input-group{
+position:relative;
+margin-bottom:35px;
+}
+
+.input-group input{
+width:100%;
+padding:10px 0;
+border:none;
+border-bottom:2px solid #444;
+background:transparent;
+outline:none;
+font-size:16px;
+}
+
+.input-group label{
+position:absolute;
+left:0;
+top:10px;
+color:#555;
+transition:0.3s;
+pointer-events:none;
+}
+
+/* FLOAT LABEL */
+
+.input-group input:focus ~ label,
+.input-group input:valid ~ label{
+top:-15px;
+font-size:12px;
+color:#000;
+}
+
+/* BUTTON */
+
+.login-btn{
+width:100%;
+padding:12px;
+border:none;
+border-radius:25px;
+background:#000;
+color:white;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+.login-btn:hover{
+background:#333;
+}
+
+/* ERROR */
+
+.error{
+color:red;
+margin-top:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ADMIN LOGIN ICON -->
+<a href="/admin-panel/" class="admin">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+</a>
+
+<div class="login-container">
+
+<h2>Welcome</h2>
+<p>Enter your Registration Number</p>
+
+<form method="POST">
+{% csrf_token %}
+
+<div class="input-group">
+<input type="text" name="registration" required>
+<label>Registration Number</label>
+</div>
+
+<button type="submit" class="login-btn">Login</button>
+
+</form>
+
+{% if error %}
+<p class="error">{{ error }}</p>
+{% endif %}
+
+</div>
+
+</body>
+</html>
