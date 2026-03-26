@@ -104,29 +104,32 @@ def admin_dashboard(request):
 
 @csrf_exempt
 def report_pc(request):
-
     if request.method == "POST":
         try:
-            data = json.loads(request.body)
+            data = json.loads(request.body.decode("utf-8"))
 
             pc_name = data.get("pc_name")
             ip = data.get("ip")
             status = data.get("status")
 
             if not pc_name:
-                return JsonResponse({"error": "No PC name"}, status=400)
+                return JsonResponse({"error": "PC name missing"}, status=400)
 
-            PC.objects.update_or_create(
+            pc, created = PC.objects.update_or_create(
                 name=pc_name,
                 defaults={
-                    "ip": ip,
-                    "status": status
+                    "ip": ip or "0.0.0.0",
+                    "status": status or "online"
                 }
             )
 
-            return JsonResponse({"status": "ok"})
+            return JsonResponse({
+                "status": "saved",
+                "pc": pc.name
+            })
 
         except Exception as e:
+            print("🔥 ERROR IN REPORT:", str(e))   # IMPORTANT FOR DEBUG
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"message": "POST required"})
