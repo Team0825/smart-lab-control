@@ -71,29 +71,31 @@ def admin_panel(request):
 @staff_member_required(login_url="/admin/login/")
 def admin_dashboard(request):
 
-    pcs = []
+    pcs = PC.objects.all()
 
-    for pc in commands.keys():
-        pcs.append({
-            "name": pc,
-            "ip": pc,
-            "status": "Online"
+    pc_list = []
+
+    for pc in pcs:
+        pc_list.append({
+            "name": pc.name,
+            "ip": pc.ip,
+            "status": pc.status
         })
 
     allowed_sites = list(
         AllowedWebsite.objects.filter(active=True)
-        .values_list("url",flat=True)
+        .values_list("url", flat=True)
     )
 
     blocked_sites = list(
         BlockedWebsite.objects.filter(active=True)
-        .values_list("url",flat=True)
+        .values_list("url", flat=True)
     )
 
-    return render(request,"dashboard.html",{
-        "pcs":pcs,
-        "allowed_sites":allowed_sites,
-        "blocked_sites":blocked_sites
+    return render(request, "dashboard.html", {
+        "pcs": pc_list,
+        "allowed_sites": allowed_sites,
+        "blocked_sites": blocked_sites
     })
 
 # ==========================
@@ -127,8 +129,7 @@ def report_pc(request):
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
 
-    # 🔥 VERY IMPORTANT (THIS FIXES YOUR ERROR)
-    return JsonResponse({"message": "Use POST request"})
+    return JsonResponse({"message": "POST required"})
 # ==========================
 # REGISTER PC
 # ==========================
