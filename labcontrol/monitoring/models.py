@@ -1,10 +1,16 @@
 from django.db import models
 
-class PC(models.Model):
-    name = models.CharField(max_length=100)
-    status = models.CharField(max_length=20)
-    last_seen = models.DateTimeField(auto_now=True)
+from django.db import models
 
+class PC(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    ip = models.CharField(max_length=50, default="0.0.0.0")
+    status = models.CharField(max_length=20, default="offline")
+
+    def __str__(self):
+        return self.name
+    
+    
 class AllowedWebsite(models.Model):
     url = models.CharField(max_length=255)
     active = models.BooleanField(default=True)
