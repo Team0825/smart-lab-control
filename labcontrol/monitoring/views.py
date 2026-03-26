@@ -4,8 +4,8 @@ from django.contrib.auth import logout
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Student, LoginRecord, AllowedWebsite, BlockedWebsite
-
+from .models import Student, LoginRecord, AllowedWebsite, BlockedWebsite, PC
+import json
 import socket
 import qrcode
 import base64
@@ -96,7 +96,25 @@ def admin_dashboard(request):
         "blocked_sites":blocked_sites
     })
 
+# ==========================
+# REGISTER PC
+# ==========================
 
+
+@csrf_exempt
+def report_pc(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+
+        PC.objects.update_or_create(
+            name=data["pc_name"],
+            defaults={
+                "ip": data["ip"],
+                "status": data["status"]
+            }
+        )
+
+        return JsonResponse({"status": "ok"})
 # ==========================
 # REGISTER PC
 # ==========================
@@ -104,10 +122,16 @@ def admin_dashboard(request):
 @csrf_exempt
 def register_pc(request):
 
-    pc = request.GET.get("pc")
+    if request.method == "POST":
+        data = json.loads(request.body)
+        
+        PC.objects.create(
+            name=data["name"],
+            ip=data["ip"],
+            status="online"
+        )
 
-    if pc and pc not in commands:
-        commands[pc] = "none"
+    
 
     return JsonResponse({"status":"ok"})
 

@@ -7,6 +7,7 @@ urlpatterns = [
 path('admin/', admin.site.urls),
 
 path('', views.student_login),
+path('api/report/' , views.report_pc),
 
 path('admin-panel/', views.admin_panel),
 path('dashboard/', views.admin_dashboard),
