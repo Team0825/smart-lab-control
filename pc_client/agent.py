@@ -18,7 +18,11 @@ def get_ip():
         return "127.0.0.1"
 
 
-PC_NAME = get_ip()
+# ===============================
+# PC NAME
+# ===============================
+PC_NAME = socket.gethostname()
+
 
 # ===============================
 # AUTO DETECT SERVER
@@ -35,27 +39,20 @@ SERVER = None
 
 while SERVER is None:
     SERVER = get_server()
-    print("Waiting for server...")
+    print("⏳ Waiting for server...")
     time.sleep(2)
-
-print("Connected to:", SERVER)
-
-# ===============================
-# INIT SERVER
-# ===============================
-SERVER = None
-
-while SERVER is None:
-    SERVER = get_server()
-    if SERVER is None:
-        print("❌ No server found... retrying in 5 sec")
-        time.sleep(5)
 
 print("🌐 Connected to server:", SERVER)
 
+
+# ===============================
+# API ENDPOINTS
+# ===============================
 COMMAND_API = SERVER + "/get-command/"
 SETTINGS_API = SERVER + "/get-settings/"
 ALERT_API = SERVER + "/send-alert/"
+REPORT_API = SERVER + "/api/report/"
+
 
 print("🖥 Agent started for:", PC_NAME)
 
@@ -67,10 +64,27 @@ HOSTS_FILE = r"C:\Windows\System32\drivers\etc\hosts"
 
 
 # ===============================
+# REPORT TO SERVER
+# ===============================
+def report_to_server():
+    try:
+        requests.post(
+            REPORT_API,
+            json={
+                "pc_name": PC_NAME,
+                "ip": get_ip(),
+                "status": "online"
+            },
+            timeout=3
+        )
+    except Exception as e:
+        print("❌ Report failed:", e)
+
+
+# ===============================
 # ALERT FUNCTION
 # ===============================
 def send_alert(message):
-
     try:
         requests.get(
             ALERT_API,
@@ -88,7 +102,6 @@ def send_alert(message):
 # WARNING POPUP
 # ===============================
 def show_warning(msg):
-
     try:
         ctypes.windll.user32.MessageBoxW(
             0,
@@ -104,7 +117,6 @@ def show_warning(msg):
 # WEBSITE FILTER
 # ===============================
 def update_hosts(allowed_sites, blocked_sites):
-
     try:
         with open(HOSTS_FILE, "r") as f:
             lines = f.readlines()
@@ -117,7 +129,6 @@ def update_hosts(allowed_sites, blocked_sites):
             for line in lines:
                 f.write(line)
 
-            # Always allow
             allow_list = allowed_sites + [
                 "localhost",
                 "127.0.0.1",
@@ -126,30 +137,27 @@ def update_hosts(allowed_sites, blocked_sites):
                 "clients.google.com"
             ]
 
-            # BLOCK LIST
             block_all = blocked_sites + [
-               
                 "tiktok.com",
                 "reddit.com"
             ]
 
             for site in block_all:
-
                 if site not in allow_list:
-
                     f.write(f"127.0.0.1 {site} #LAB_BLOCK\n")
                     f.write(f"127.0.0.1 www.{site} #LAB_BLOCK\n")
 
     except Exception as e:
-        print("Host update error:", e)
+        print("⚠️ Host update error:", e)
 
 
 # ===============================
 # MAIN LOOP
 # ===============================
 while True:
-
     try:
+        # 🔁 REPORT PC STATUS
+        report_to_server()
 
         # ---------------------------
         # GET COMMAND
@@ -195,4 +203,4 @@ while True:
     except Exception as e:
         print("⚠️ Agent error:", e)
 
-    time.sleep(3)
+    time.sleep(5)

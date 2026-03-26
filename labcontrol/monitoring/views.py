@@ -100,21 +100,35 @@ def admin_dashboard(request):
 # REGISTER PC
 # ==========================
 
-
 @csrf_exempt
 def report_pc(request):
+
     if request.method == "POST":
-        data = json.loads(request.body)
+        try:
+            data = json.loads(request.body)
 
-        PC.objects.update_or_create(
-            name=data["pc_name"],
-            defaults={
-                "ip": data["ip"],
-                "status": data["status"]
-            }
-        )
+            pc_name = data.get("pc_name")
+            ip = data.get("ip")
+            status = data.get("status")
 
-        return JsonResponse({"status": "ok"})
+            if not pc_name:
+                return JsonResponse({"error": "No PC name"}, status=400)
+
+            PC.objects.update_or_create(
+                name=pc_name,
+                defaults={
+                    "ip": ip,
+                    "status": status
+                }
+            )
+
+            return JsonResponse({"status": "ok"})
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    # 🔥 VERY IMPORTANT (THIS FIXES YOUR ERROR)
+    return JsonResponse({"message": "Use POST request"})
 # ==========================
 # REGISTER PC
 # ==========================
