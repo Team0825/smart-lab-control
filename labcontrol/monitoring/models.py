@@ -1,5 +1,9 @@
 from django.db import models
 
+class PC(models.Model):
+    name = models.CharField(max_length=100)
+    status = models.CharField(max_length=20)
+    last_seen = models.DateTimeField(auto_now=True)
 
 class AllowedWebsite(models.Model):
     url = models.CharField(max_length=255)
