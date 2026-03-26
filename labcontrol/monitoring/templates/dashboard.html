@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-<meta http-equiv="refresh" content="10">
-<title>Smart Lab Dashboard</title>
-
-<style>
+<!DOCTYPE html><html>
+<head><meta http-equiv="refresh" content="10">
+<title>Smart Lab Dashboard</title><style>
 
 *{
 margin:0;
@@ -20,7 +15,7 @@ padding:40px;
 overflow-x:hidden;
 }
 
-/* Logout FIXED */
+/* Logout */
 
 .logout-box{
 position:fixed;
@@ -68,6 +63,10 @@ border-collapse:collapse;
 margin-top:20px;
 }
 
+th{
+background:rgba(0,0,0,0.1);
+}
+
 th,td{
 padding:12px;
 text-align:center;
@@ -76,18 +75,23 @@ border-bottom:1px solid #ccc;
 
 /* Buttons */
 
-button{
+.btn{
 padding:6px 12px;
 border:none;
 border-radius:20px;
-background:black;
-color:white;
 cursor:pointer;
 margin:3px;
+color:white;
 }
 
-button:hover{
-background:#333;
+.lock{background:#000;}
+.off{background:#0d6efd;}
+.on{background:#28a745;}
+.warn{background:#ffc107;color:black;}
+.unlock{background:#6f42c1;}
+
+.btn:hover{
+opacity:0.8;
 }
 
 /* Sections */
@@ -105,13 +109,18 @@ border-radius:10px;
 margin-right:10px;
 }
 
-</style>
+/* Responsive */
 
-<script>
+@media(max-width:768px){
+table{
+font-size:12px;
+}
+}
+
+</style><script>
 
 function sendCommand(pc,cmd){
 fetch(`/set-command/?pc=${pc}&cmd=${cmd}`)
-.then(()=>alert("Command Sent: " + cmd))
 }
 
 function addSite(){
@@ -136,92 +145,40 @@ fetch(`/unblock-site/?site=${site}`)
 .then(()=>location.reload())
 }
 
-</script>
-
-</head>
-
-<body>
-
-<!-- FIXED LOGOUT -->
-<div class="logout-box">
+</script></head><body><div class="logout-box">
 <a href="/logout/">
 <button class="logout">Logout</button>
 </a>
-</div>
-
-<div class="container">
-
-<h2>Smart Lab Control Dashboard</h2>
-
-<table>
-
-<tr>
+</div><div class="container"><h2>Smart Lab Control Dashboard</h2><table><tr>
 <th>PC</th>
 <th>IP</th>
 <th>Status</th>
 <th>Control</th>
-</tr>
+</tr>{% for pc in pcs %}
 
-{% for pc in pcs %}
-
-<tr>
-
-<td>{{ pc.name }}</td>
+<tr><td>{{ pc.name }}</td>
 <td>{{ pc.ip }}</td>
-<td>{{ pc.status }}</td>
+<td>{{ pc.status }}</td><td>
+<button class="btn lock" onclick="sendCommand('{{pc.name}}','lock')">🔒 Lock</button>
+<button class="btn unlock" onclick="sendCommand('{{pc.name}}','unlock')">🔓 Unlock</button>
+<button class="btn off" onclick="sendCommand('{{pc.name}}','internet_off')">🌐 Off</button>
+<button class="btn on" onclick="sendCommand('{{pc.name}}','internet_on')">✅ On</button>
+<button class="btn warn" onclick="sendCommand('{{pc.name}}','warning')">⚠ Warn</button>
+</td></tr>{% endfor %}
 
-<td>
-<button onclick="sendCommand('{{pc.name}}','lock')">🔒 Lock</button>
-<button onclick="sendCommand('{{pc.name}}','internet_off')">🌐 Off</button>
-<button onclick="sendCommand('{{pc.name}}','internet_on')">✅ On</button>
-<button onclick="sendCommand('{{pc.name}}','warning')">⚠ Warn</button>
-</td>
-
-</tr>
-
-{% endfor %}
-
-</table>
-
-<!-- Allowed -->
-
-<div class="section">
-
-<h3>Add Allowed Website</h3>
-
-<input id="site" placeholder="example.com">
-<button onclick="addSite()">Add</button>
-
-<ul>
+</table><div class="section"><h3>Add Allowed Website</h3><input id="site" placeholder="example.com">
+<button onclick="addSite()">Add</button><ul>
 {% for site in allowed_sites %}
 <li>{{ site }} 
 <button onclick="removeSite('{{site}}')">Remove</button>
 </li>
 {% endfor %}
-</ul>
-
-</div>
-
-<!-- Blocked -->
-
-<div class="section">
-
-<h3>Block Website</h3>
-
-<input id="blocksite" placeholder="example.com">
-<button onclick="blockSite()">Block</button>
-
-<ul>
+</ul></div><div class="section"><h3>Block Website</h3><input id="blocksite" placeholder="example.com">
+<button onclick="blockSite()">Block</button><ul>
 {% for site in blocked_sites %}
 <li>{{ site }} 
 <button onclick="unblockSite('{{site}}')">Unblock</button>
 </li>
 {% endfor %}
-</ul>
-
-</div>
-
-</div>
-
-</body>
+</ul></div></div></body>
 </html>
