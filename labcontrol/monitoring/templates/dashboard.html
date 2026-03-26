@@ -14,15 +14,36 @@ box-sizing:border-box;
 font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
 }
 
-
 body{
-     margin: 0;
-    overflow-x: hidden;
 background:linear-gradient(90deg,#fff7ad,#ffa9f9);
 padding:40px;
+overflow-x:hidden;
 }
 
-/* Container same as login */
+/* Logout FIXED */
+
+.logout-box{
+position:fixed;
+top:20px;
+right:20px;
+z-index:1000;
+}
+
+.logout{
+background:red;
+color:white;
+padding:10px 18px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.logout:hover{
+background:#b30000;
+}
+
+/* Container */
 
 .container{
 background:rgba(255,255,255,0.35);
@@ -48,7 +69,7 @@ margin-top:20px;
 }
 
 th,td{
-padding:10px;
+padding:12px;
 text-align:center;
 border-bottom:1px solid #ccc;
 }
@@ -62,11 +83,17 @@ border-radius:20px;
 background:black;
 color:white;
 cursor:pointer;
-margin:2px;
+margin:3px;
 }
 
 button:hover{
 background:#333;
+}
+
+/* Sections */
+
+.section{
+margin-top:30px;
 }
 
 /* Input */
@@ -78,37 +105,13 @@ border-radius:10px;
 margin-right:10px;
 }
 
-/* Sections */
-
-.section{
-margin-top:30px;
-}
-
-/* Logout */
-
-.logout{
-position:absolute;
-top:20px;
-right:20px;
-background:red;
-color:white;
-padding:10px 18px;
-border:none;
-border-radius:20px;
-cursor:pointer;
-font-weight:bold;
-}
-
-.logout:hover{
-background:#b30000;
-}
-
 </style>
 
 <script>
 
-function sendCommand(ip,cmd){
-fetch(`/set-command/?pc=${ip}&cmd=${cmd}`)
+function sendCommand(pc,cmd){
+fetch(`/set-command/?pc=${pc}&cmd=${cmd}`)
+.then(()=>alert("Command Sent: " + cmd))
 }
 
 function addSite(){
@@ -139,9 +142,12 @@ fetch(`/unblock-site/?site=${site}`)
 
 <body>
 
+<!-- FIXED LOGOUT -->
+<div class="logout-box">
 <a href="/logout/">
 <button class="logout">Logout</button>
 </a>
+</div>
 
 <div class="container">
 
@@ -165,9 +171,10 @@ fetch(`/unblock-site/?site=${site}`)
 <td>{{ pc.status }}</td>
 
 <td>
-<button onclick="sendCommand('{{pc.ip}}','lock')">Lock</button>
-<button onclick="sendCommand('{{pc.ip}}','internet_off')">Off</button>
-<button onclick="sendCommand('{{pc.ip}}','internet_on')">On</button>
+<button onclick="sendCommand('{{pc.name}}','lock')">🔒 Lock</button>
+<button onclick="sendCommand('{{pc.name}}','internet_off')">🌐 Off</button>
+<button onclick="sendCommand('{{pc.name}}','internet_on')">✅ On</button>
+<button onclick="sendCommand('{{pc.name}}','warning')">⚠ Warn</button>
 </td>
 
 </tr>
@@ -187,7 +194,9 @@ fetch(`/unblock-site/?site=${site}`)
 
 <ul>
 {% for site in allowed_sites %}
-<li>{{ site }} <button onclick="removeSite('{{site}}')">Remove</button></li>
+<li>{{ site }} 
+<button onclick="removeSite('{{site}}')">Remove</button>
+</li>
 {% endfor %}
 </ul>
 
@@ -204,7 +213,9 @@ fetch(`/unblock-site/?site=${site}`)
 
 <ul>
 {% for site in blocked_sites %}
-<li>{{ site }} <button onclick="unblockSite('{{site}}')">Unblock</button></li>
+<li>{{ site }} 
+<button onclick="unblockSite('{{site}}')">Unblock</button>
+</li>
 {% endfor %}
 </ul>
 
