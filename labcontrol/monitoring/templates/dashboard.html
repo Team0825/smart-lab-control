@@ -158,7 +158,13 @@ fetch(`/unblock-site/?site=${site}`)
 
 <tr><td>{{ pc.name }}</td>
 <td>{{ pc.ip }}</td>
-<td>{{ pc.status }}</td><td>
+<td>
+{% if pc.status == "online" %}
+<span style="color:green;font-weight:bold;">● Online</span>
+{% else %}
+<span style="color:red;font-weight:bold;">● Offline</span>
+{% endif %}
+</td>
 <button class="btn lock" onclick="sendCommand('{{pc.name}}','lock')">🔒 Lock</button>
 <button class="btn unlock" onclick="sendCommand('{{pc.name}}','unlock')">🔓 Unlock</button>
 <button class="btn off" onclick="sendCommand('{{pc.name}}','internet_off')">🌐 Off</button>

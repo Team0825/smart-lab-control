@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.contrib.auth import logout
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+from datetime import timedelta
 
 from .models import Student, LoginRecord, AllowedWebsite, BlockedWebsite, PC
 
@@ -62,10 +64,19 @@ def admin_panel(request):
 # ==========================
 # DASHBOARD (FIXED)
 # ==========================
+from django.utils import timezone
+
+
 @staff_member_required(login_url="/admin/login/")
 def admin_dashboard(request):
 
     pcs = PC.objects.all()
+
+    for pc in pcs:
+        if timezone.now() - pc.last_seen > timedelta(seconds=15):
+            pc.status = "offline"
+        else:
+            pc.status = "online"
 
     allowed_sites = list(
         AllowedWebsite.objects.filter(active=True)
@@ -83,10 +94,11 @@ def admin_dashboard(request):
         "blocked_sites": blocked_sites
     })
 
-
 # ==========================
 # REPORT PC (FIXED)
 # ==========================
+
+
 @csrf_exempt
 def report_pc(request):
 
@@ -96,25 +108,22 @@ def report_pc(request):
 
             pc_name = data.get("pc_name")
             ip = data.get("ip")
-            status = data.get("status")
-
-            if not pc_name:
-                return JsonResponse({"error": "PC name required"}, status=400)
 
             PC.objects.update_or_create(
                 name=pc_name,
                 defaults={
-                    "ip": ip or "0.0.0.0",
-                    "status": status or "online"
+                    "ip": ip,
+                    "status": "online",
+                    "last_seen": timezone.now()
                 }
             )
 
-            return JsonResponse({"status": "success"})
+            return JsonResponse({"status": "ok"})
 
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
 
-    return JsonResponse({"message": "Use POST request"})
+    return JsonResponse({"message": "Use POST"})
 
 
 # ==========================
