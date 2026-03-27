@@ -36,13 +36,10 @@ class Student(models.Model):
 
 class LoginRecord(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True)
     pc_name = models.CharField(max_length=50)
     ip_address = models.CharField(max_length=20)
-    login_time = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.student} - {self.pc_name}"
-    
+    login_time = models.DateTimeField(auto_now_add=True)  
 
 class PC(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -52,3 +49,18 @@ class PC(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Session(models.Model):
+    title = models.CharField(max_length=100)
+    code = models.CharField(max_length=20, unique=True)
+    start_time = models.DateTimeField(auto_now_add=True)
+    duration = models.IntegerField()  # in minutes
+    active = models.BooleanField(default=True)
+
+    def is_active(self):
+        from django.utils import timezone
+        end_time = self.start_time + timezone.timedelta(minutes=self.duration)
+        return timezone.now() <= end_time and self.active
+
+    def __str__(self):
+        return f"{self.title} ({self.code})"

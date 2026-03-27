@@ -6,8 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from datetime import timedelta
 
-from .models import Student, LoginRecord, AllowedWebsite, BlockedWebsite, PC
-
+from .models import Student, LoginRecord, AllowedWebsite, BlockedWebsite, PC, Session
+import random
 import json
 import socket
 import qrcode
@@ -15,32 +15,90 @@ import base64
 from io import BytesIO
 
 commands = {}
+# ==========================
+# SESSATION CREATION
+# ==========================
 
 
-# ==========================
-# STUDENT LOGIN
-# ==========================
-def student_login(request):
+@staff_member_required
+def create_session(request):
+
     if request.method == "POST":
+
+        title = request.POST.get("title")
+        duration = int(request.POST.get("duration"))
+
+        code = str(random.randint(100000,999999))
+
+        Session.objects.create(
+            title=title,
+            duration=duration,
+            code=code
+        )
+
+        return render(request,"create_session.html",{"code":code})
+
+    return render(request,"create_session.html")
+# ==========================
+# SESSATION
+# ==========================
+
+
+def check_session(request):
+
+    try:
+        record = LoginRecord.objects.latest('login_time')
+        session = record.session
+
+        if not session.is_active():
+            return JsonResponse({"active": False})
+
+        return JsonResponse({"active": True})
+
+    except:
+        return JsonResponse({"active": False})
+# ==========================
+# STUDENT LOGIN 
+# ==========================
+
+def student_login(request):
+
+    if request.method == "POST":
+
         reg = request.POST.get("registration")
+        session_code = request.POST.get("session_code")
 
         try:
             student = Student.objects.get(registration_number=reg)
+            session = Session.objects.get(code=session_code)
 
+            # ❌ Check session active
+            if not session.is_active():
+                return render(request,"login.html",{"error":"Session expired or invalid"})
+
+            # ❌ Prevent multiple login
+            already_logged = LoginRecord.objects.filter(
+                student=student,
+                session=session
+            ).exists()
+
+            if already_logged:
+                return render(request,"login.html",{"error":"Already logged in"})
+
+            # ✅ Save login
             LoginRecord.objects.create(
                 student=student,
                 pc_name=socket.gethostname(),
-                ip_address=request.META.get("REMOTE_ADDR")
+                ip_address=request.META.get("REMOTE_ADDR"),
+                session=session
             )
 
-            return render(request, "success.html", {"student": student})
+            return render(request,"success.html",{"student":student})
 
         except:
-            return render(request, "login.html", {"error": "Student not found"})
+            return render(request,"login.html",{"error":"Invalid details"})
 
-    return render(request, "login.html")
-
-
+    return render(request,"login.html")
 # ==========================
 # ADMIN PANEL
 # ==========================

@@ -50,7 +50,18 @@ margin-bottom:10px;
 <body>
 
 <div class="success-container">
-
+<script>
+setInterval(() => {
+    fetch("/check-session/")
+    .then(res => res.json())
+    .then(data => {
+        if (!data.active){
+            alert("Session expired!");
+            window.location.href = "/";
+        }
+    })
+}, 5000);
+</script>
 <h2>Welcome {{ student.name }}</h2>
 
 <p>You are successfully logged in.</p>

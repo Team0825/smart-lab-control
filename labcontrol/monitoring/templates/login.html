@@ -145,12 +145,13 @@ margin-top:15px;
 <form method="POST">
 {% csrf_token %}
 
+
 <div class="input-group">
-<input type="text" name="registration" required>
-<label>Registration Number</label>
+<input name="registration" placeholder="Registration Number">
+<input name="session_code" placeholder="Session Code">
+<button type="submit">Login</button>
 </div>
 
-<button type="submit" class="login-btn">Login</button>
 
 </form>
 
