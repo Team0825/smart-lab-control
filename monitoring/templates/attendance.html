@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Attendance Report</title>
+</head>
+<body>
+
+<h2>Attendance Report</h2>
+
+<table border="1">
+
+<tr>
+<th>Student</th>
+<th>Registration</th>
+<th>Session</th>
+<th>Login Time</th>
+<th>Logout Time</th>
+</tr>
+
+{% for r in records %}
+
+<tr>
+
+<td>{{ r.student.name }}</td>
+
+<td>{{ r.student.registration_number }}</td>
+
+<td>{{ r.session.title }}</td>
+
+<td>{{ r.login_time }}</td>
+
+<td>{{ r.logout_time }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>

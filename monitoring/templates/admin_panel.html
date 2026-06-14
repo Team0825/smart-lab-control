@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Control Panel</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+background:linear-gradient(90deg,#fff7ad,#ffa9f9);
+}
+
+/* PANEL */
+
+.panel{
+background:rgba(255,255,255,0.35);
+backdrop-filter:blur(12px);
+padding:50px;
+border-radius:18px;
+box-shadow:0 20px 40px rgba(0,0,0,0.2);
+width:420px;
+text-align:center;
+}
+
+/* TITLE */
+
+.panel h2{
+font-size:28px;
+margin-bottom:10px;
+color:#222;
+}
+
+.panel p{
+font-size:14px;
+margin-bottom:20px;
+color:#444;
+}
+
+/* BUTTON */
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:25px;
+background:#000;
+color:white;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+margin-top:10px;
+}
+
+button:hover{
+background:#333;
+}
+
+/* QR */
+
+.qr{
+margin-top:30px;
+}
+
+.qr img{
+width:150px;
+margin-top:10px;
+}
+
+.qr p{
+font-size:13px;
+margin-top:8px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="panel">
+
+<h2>Admin Control</h2>
+<p>Select control method</p>
+
+<!-- DASHBOARD CONTROL -->
+
+<a href="/dashboard/">
+<button>Open Lab Dashboard</button>
+</a>
+
+<!-- DJANGO ADMIN -->
+
+<a href="/admin/">
+<button>Django Administration</button>
+</a>
+
+<!-- MOBILE CONTROL -->
+
+<div class="qr">
+
+<h3>Mobile Control</h3>
+
+<img src="data:image/png;base64,{{ qr }}">
+
+<p>Scan to open mobile control panel</p>
+
+</div>
+
+</div>
+
+</body>
+</html>
