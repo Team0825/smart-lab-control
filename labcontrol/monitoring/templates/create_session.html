@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Create Session</title>
+</head>
+<body>
+
+<h2>Create Session</h2>
+
+<form method="post">
+{% csrf_token %}
+
+<input name="title" placeholder="Class Title">
+
+<input name="duration" placeholder="Duration (minutes)">
+
+<button type="submit">
+Create Session
+</button>
+
+</form>
+
+{% if code %}
+<h3>Session Code: {{ code }}</h3>
+{% endif %}
+
+</body>
+</html>

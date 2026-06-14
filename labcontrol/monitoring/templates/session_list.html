@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sessions</title>
+</head>
+<body>
+
+<h2>Session Management</h2>
+
+<a href="/create-session/">Create Session</a>
+
+<table border="1">
+
+<tr>
+<th>Title</th>
+<th>Code</th>
+<th>Duration</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+{% for s in sessions %}
+
+<tr>
+
+<td>{{ s.title }}</td>
+<td>{{ s.code }}</td>
+<td>{{ s.duration }} Min</td>
+
+<td>
+
+{% if s.active %}
+Active
+{% else %}
+Ended
+{% endif %}
+
+</td>
+
+<td>
+
+{% if s.active %}
+<a href="/sessions/end/{{s.id}}/">
+End Session
+</a>
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>

@@ -1,10 +1,12 @@
 from django.db import models
 from django.utils import timezone
 
+
 class PC(models.Model):
     name = models.CharField(max_length=100, unique=True)
     ip = models.CharField(max_length=50, default="0.0.0.0")
     status = models.CharField(max_length=20, default="offline")
+    last_seen = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
@@ -27,40 +29,40 @@ class BlockedWebsite(models.Model):
 
 
 class Student(models.Model):
-    registration_number = models.CharField(max_length=20)
+    registration_number = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=100)
+    department = models.CharField(max_length=100)
+    semester = models.IntegerField()
 
     def __str__(self):
-        return self.registration_number
+        return f"{self.registration_number} - {self.name}"
 
 
-class LoginRecord(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True)
-    pc_name = models.CharField(max_length=50)
-    ip_address = models.CharField(max_length=20)
-    login_time = models.DateTimeField(auto_now_add=True)  
-
-class PC(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    ip = models.CharField(max_length=50, default="0.0.0.0")
-    status = models.CharField(max_length=20, default="offline")
-    last_seen = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return self.name
-    
 class Session(models.Model):
     title = models.CharField(max_length=100)
     code = models.CharField(max_length=20, unique=True)
     start_time = models.DateTimeField(auto_now_add=True)
-    duration = models.IntegerField()  # in minutes
+    duration = models.IntegerField()  # minutes
     active = models.BooleanField(default=True)
 
     def is_active(self):
-        from django.utils import timezone
         end_time = self.start_time + timezone.timedelta(minutes=self.duration)
         return timezone.now() <= end_time and self.active
 
     def __str__(self):
         return f"{self.title} ({self.code})"
+
+
+class LoginRecord(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True, blank=True)
+
+    pc_name = models.CharField(max_length=50)
+    ip_address = models.CharField(max_length=20)
+
+    login_time = models.DateTimeField(auto_now_add=True)
+
+    logout_time = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.student.name} - {self.pc_name}"

@@ -1,6 +1,12 @@
-<!DOCTYPE html><html>
-<head><meta http-equiv="refresh" content="10">
-<title>Smart Lab Dashboard</title><style>
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta http-equiv="refresh" content="10">
+<title>Smart Lab Dashboard</title>
+
+<style>
 
 *{
 margin:0;
@@ -14,8 +20,6 @@ background:linear-gradient(90deg,#fff7ad,#ffa9f9);
 padding:40px;
 overflow-x:hidden;
 }
-
-/* Logout */
 
 .logout-box{
 position:fixed;
@@ -38,8 +42,6 @@ font-weight:bold;
 background:#b30000;
 }
 
-/* Container */
-
 .container{
 background:rgba(255,255,255,0.35);
 backdrop-filter:blur(12px);
@@ -48,14 +50,10 @@ border-radius:18px;
 box-shadow:0 20px 40px rgba(0,0,0,0.2);
 }
 
-/* Heading */
-
 h2{
 text-align:center;
 margin-bottom:20px;
 }
-
-/* Table */
 
 table{
 width:100%;
@@ -73,8 +71,6 @@ text-align:center;
 border-bottom:1px solid #ccc;
 }
 
-/* Buttons */
-
 .btn{
 padding:6px 12px;
 border:none;
@@ -85,22 +81,18 @@ color:white;
 }
 
 .lock{background:#000;}
+.unlock{background:#6f42c1;}
 .off{background:#0d6efd;}
 .on{background:#28a745;}
 .warn{background:#ffc107;color:black;}
-.unlock{background:#6f42c1;}
 
 .btn:hover{
 opacity:0.8;
 }
 
-/* Sections */
-
 .section{
 margin-top:30px;
 }
-
-/* Input */
 
 input{
 padding:10px;
@@ -109,18 +101,19 @@ border-radius:10px;
 margin-right:10px;
 }
 
-/* Responsive */
-
 @media(max-width:768px){
 table{
 font-size:12px;
 }
 }
 
-</style><script>
+</style>
+
+<script>
 
 function sendCommand(pc,cmd){
 fetch(`/set-command/?pc=${pc}&cmd=${cmd}`)
+.then(()=>location.reload())
 }
 
 function addSite(){
@@ -145,54 +138,164 @@ fetch(`/unblock-site/?site=${site}`)
 .then(()=>location.reload())
 }
 
-</script></head><body><div class="logout-box">
+</script>
+
+</head>
+
+<body>
+
+<div class="logout-box">
 <a href="/logout/">
 <button class="logout">Logout</button>
 </a>
-</div><div class="container"><h2>Smart Lab Control Dashboard</h2><table><tr>
+</div>
+
+<div class="container">
+
+<h2>Smart Lab Control Dashboard</h2>
+
+<div style="margin-bottom:20px;text-align:center;">
+<h3>🔥 Global Control</h3>
+
+<button class="btn lock"
+onclick="sendCommand('ALL','lock')">
+🔒 Lock All
+</button>
+
+<button class="btn unlock"
+onclick="sendCommand('ALL','unlock')">
+🔓 Unlock All
+</button>
+
+<button class="btn off"
+onclick="sendCommand('ALL','internet_off')">
+🌐 Net Off All
+</button>
+
+<button class="btn on"
+onclick="sendCommand('ALL','internet_on')">
+✅ Net On All
+</button>
+
+</div>
+
+<table>
+
+<tr>
 <th>PC</th>
 <th>IP</th>
 <th>Status</th>
+<th>Student</th>
+<th>Session</th>
 <th>Control</th>
-</tr>{% for pc in pcs %}
+</tr>
 
-<tr><td>{{ pc.name }}</td>
+{% for pc in pcs %}
+
+<tr>
+
+<td>{{ pc.name }}</td>
+
 <td>{{ pc.ip }}</td>
+
 <td>
 {% if pc.status == "online" %}
-<span style="color:green;font-weight:bold;">● Online</span>
+<span style="color:green;font-weight:bold;">
+● Online
+</span>
 {% else %}
-<span style="color:red;font-weight:bold;">● Offline</span>
+<span style="color:red;font-weight:bold;">
+● Offline
+</span>
 {% endif %}
 </td>
-<div style="margin-bottom:20px; text-align:center;">
-    <h3>🔥 Global Control</h3>
 
-    <button class="btn lock" onclick="sendCommand('ALL','lock')">🔒 Lock All</button>
-    <button class="btn unlock" onclick="sendCommand('ALL','unlock')">🔓 Unlock All</button>
-    <button class="btn off" onclick="sendCommand('ALL','internet_off')">🌐 Net Off All</button>
-    <button class="btn on" onclick="sendCommand('ALL','internet_on')">✅ Net On All</button>
-</div>
-<button class="btn lock" onclick="sendCommand('{{pc.name}}','lock')">🔒 Lock</button>
-<button class="btn unlock" onclick="sendCommand('{{pc.name}}','unlock')">🔓 Unlock</button>
-<button class="btn off" onclick="sendCommand('{{pc.name}}','internet_off')">🌐 Off</button>
-<button class="btn on" onclick="sendCommand('{{pc.name}}','internet_on')">✅ On</button>
-<button class="btn warn" onclick="sendCommand('{{pc.name}}','warning')">⚠ Warn</button>
-</td></tr>{% endfor %}
+<td>{{ pc.student }}</td>
 
-</table><div class="section"><h3>Add Allowed Website</h3><input id="site" placeholder="example.com">
-<button onclick="addSite()">Add</button><ul>
+<td>{{ pc.session }}</td>
+
+<td>
+
+<button class="btn lock"
+onclick="sendCommand('{{pc.name}}','lock')">
+🔒 Lock
+</button>
+
+<button class="btn unlock"
+onclick="sendCommand('{{pc.name}}','unlock')">
+🔓 Unlock
+</button>
+
+<button class="btn off"
+onclick="sendCommand('{{pc.name}}','internet_off')">
+🌐 Off
+</button>
+
+<button class="btn on"
+onclick="sendCommand('{{pc.name}}','internet_on')">
+✅ On
+</button>
+
+<button class="btn warn"
+onclick="sendCommand('{{pc.name}}','warning')">
+⚠ Warn
+</button>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<div class="section">
+
+<h3>Add Allowed Website</h3>
+
+<input id="site" placeholder="example.com">
+
+<button onclick="addSite()">
+Add
+</button>
+
+<ul>
 {% for site in allowed_sites %}
-<li>{{ site }} 
-<button onclick="removeSite('{{site}}')">Remove</button>
+<li>
+{{ site }}
+<button onclick="removeSite('{{site}}')">
+Remove
+</button>
 </li>
 {% endfor %}
-</ul></div><div class="section"><h3>Block Website</h3><input id="blocksite" placeholder="example.com">
-<button onclick="blockSite()">Block</button><ul>
+</ul>
+
+</div>
+
+<div class="section">
+
+<h3>Block Website</h3>
+
+<input id="blocksite" placeholder="example.com">
+
+<button onclick="blockSite()">
+Block
+</button>
+
+<ul>
 {% for site in blocked_sites %}
-<li>{{ site }} 
-<button onclick="unblockSite('{{site}}')">Unblock</button>
+<li>
+{{ site }}
+<button onclick="unblockSite('{{site}}')">
+Unblock
+</button>
 </li>
 {% endfor %}
-</ul></div></div></body>
+</ul>
+
+</div>
+
+</div>
+
+</body>
 </html>

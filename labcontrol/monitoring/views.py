@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from .models import Student
 from django.http import JsonResponse
 from django.contrib.auth import logout
 from django.contrib.admin.views.decorators import staff_member_required
@@ -47,16 +48,122 @@ def create_session(request):
 def check_session(request):
 
     try:
+
         record = LoginRecord.objects.latest('login_time')
+
         session = record.session
 
         if not session.is_active():
-            return JsonResponse({"active": False})
 
-        return JsonResponse({"active": True})
+            if record.logout_time is None:
+                record.logout_time = timezone.now()
+                record.save()
+
+            return JsonResponse({
+                "active": False
+            })
+
+        return JsonResponse({
+            "active": True
+        })
 
     except:
-        return JsonResponse({"active": False})
+        return JsonResponse({
+            "active": False
+        })
+        
+        
+   
+def session_list(request):
+    
+    sessions = Session.objects.all().order_by("-start_time")
+    return render(
+        request,
+        "session_list.html",
+        {
+            "sessions": sessions
+        }
+    )    
+    
+# ==========================
+# Session list
+# ==========================
+@staff_member_required
+def end_session(request, id):
+    try:
+        session = Session.objects.get(id=id)
+        session.active = False
+        session.save()
+    except:
+        pass
+    return redirect("/sessions/")
+
+def attendance_report(request):
+    records = LoginRecord.objects.select_related(
+        "student",
+        "session"
+    ).order_by("-login_time")
+    return render(
+        request,
+        "attendance.html",
+        {
+            "records": records
+        }
+    )    
+# ==========================
+# STUDENT MANAGEMENT
+# ==========================
+
+def student_list(request):
+
+    students = Student.objects.all().order_by("registration_number")
+
+    return render(request, "students.html", {
+        "students": students
+    })
+
+
+def add_student(request):
+
+    if request.method == "POST":
+
+        Student.objects.create(
+            registration_number=request.POST.get("registration_number"),
+            name=request.POST.get("name"),
+            department=request.POST.get("department"),
+            semester=request.POST.get("semester")
+        )
+
+        return redirect("/students/")
+
+    return render(request, "add_student.html")
+
+
+def edit_student(request, id):
+
+    student = Student.objects.get(id=id)
+
+    if request.method == "POST":
+
+        student.registration_number = request.POST.get("registration_number")
+        student.name = request.POST.get("name")
+        student.department = request.POST.get("department")
+        student.semester = request.POST.get("semester")
+
+        student.save()
+
+        return redirect("/students/")
+
+    return render(request, "edit_student.html", {
+        "student": student
+    })
+
+
+def delete_student(request, id):
+
+    Student.objects.get(id=id).delete()
+
+    return redirect("/students/")    
 # ==========================
 # STUDENT LOGIN 
 # ==========================
@@ -86,14 +193,24 @@ def student_login(request):
                 return render(request,"login.html",{"error":"Already logged in"})
 
             # ✅ Save login
-            LoginRecord.objects.create(
-                student=student,
-                pc_name=socket.gethostname(),
-                ip_address=request.META.get("REMOTE_ADDR"),
-                session=session
-            )
+            pc_name = socket.gethostname()
+            ip_address = request.META.get("REMOTE_ADDR")
 
-            return render(request,"success.html",{"student":student})
+            PC.objects.update_or_create(
+               name=pc_name,
+               defaults={
+                  "ip": ip_address,
+                  "status": "online",
+                  "last_seen": timezone.now()
+                 }
+             )
+
+            LoginRecord.objects.create(
+                       student=student,
+                       pc_name=pc_name,
+                       ip_address=ip_address,
+                       session=session
+                                     )
 
         except:
             return render(request,"login.html",{"error":"Invalid details"})
@@ -124,17 +241,43 @@ def admin_panel(request):
 # ==========================
 from django.utils import timezone
 
-
 @staff_member_required(login_url="/admin/login/")
 def admin_dashboard(request):
 
-    pcs = PC.objects.all()
+    pcs = []
 
-    for pc in pcs:
+    all_pcs = PC.objects.all()
+
+    for pc in all_pcs:
+
+        try:
+            login = LoginRecord.objects.filter(
+                pc_name=pc.name
+            ).latest("login_time")
+
+            student_name = login.student.name
+
+            if login.session:
+                session_name = login.session.title
+            else:
+                session_name = "-"
+
+        except:
+            student_name = "-"
+            session_name = "-"
+
         if timezone.now() - pc.last_seen > timedelta(seconds=15):
-            pc.status = "offline"
+            status = "offline"
         else:
-            pc.status = "online"
+            status = "online"
+
+        pcs.append({
+            "name": pc.name,
+            "ip": pc.ip,
+            "status": status,
+            "student": student_name,
+            "session": session_name
+        })
 
     allowed_sites = list(
         AllowedWebsite.objects.filter(active=True)

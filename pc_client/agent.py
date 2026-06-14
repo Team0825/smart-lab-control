@@ -64,21 +64,25 @@ HOSTS_FILE = r"C:\Windows\System32\drivers\etc\hosts"
 
 
 # ===============================
-# REPORT TO SERVER
+# REPORT TO SERVER (FIXED)
 # ===============================
 def report_to_server():
-    try:
-        requests.post(
-            REPORT_API,
-            json={
-                "pc_name": PC_NAME,
-                "ip": get_ip(),
-                "status": "online"
-            },
-            timeout=3
-        )
-    except Exception as e:
-        print("❌ Report failed:", e)
+    for i in range(3):  # retry 3 times
+        try:
+            r = requests.post(
+                REPORT_API,
+                json={
+                    "pc_name": PC_NAME,
+                    "ip": get_ip(),
+                    "status": "online"
+                },
+                timeout=10
+            )
+            print("✅ Report sent:", r.status_code)
+            return
+        except Exception as e:
+            print(f"❌ Report retry {i+1}:", e)
+            time.sleep(2)
 
 
 # ===============================
@@ -92,7 +96,7 @@ def send_alert(message):
                 "pc": PC_NAME,
                 "msg": message
             },
-            timeout=3
+            timeout=10
         )
     except:
         pass
@@ -162,14 +166,16 @@ while True:
         # ---------------------------
         # GET COMMAND
         # ---------------------------
-        r = requests.get(
-            COMMAND_API,
-            params={"pc": PC_NAME},
-            timeout=3
-        )
-
-        data = r.json()
-        command = data.get("command", "none")
+        try:
+            r = requests.get(
+                COMMAND_API,
+                params={"pc": PC_NAME},
+                timeout=10
+            )
+            data = r.json()
+            command = data.get("command", "none")
+        except:
+            command = "none"
 
         print("📡 Command:", command)
 
@@ -189,16 +195,21 @@ while True:
 
         elif command == "warning":
             show_warning("Admin warning!")
+        
+        elif command == "unlock":
+            os.system('netsh interface set interface "Wi-Fi" admin=enable')
+            os.system('netsh interface set interface "Ethernet" admin=enable')    
 
         # ---------------------------
         # GET SETTINGS
         # ---------------------------
-        s = requests.get(SETTINGS_API, timeout=3).json()
-
-        allowed_sites = s.get("allowed_sites", [])
-        blocked_sites = s.get("blocked_sites", [])
-
-        update_hosts(allowed_sites, blocked_sites)
+        try:
+            s = requests.get(SETTINGS_API, timeout=10).json()
+            allowed_sites = s.get("allowed_sites", [])
+            blocked_sites = s.get("blocked_sites", [])
+            update_hosts(allowed_sites, blocked_sites)
+        except:
+            pass
 
     except Exception as e:
         print("⚠️ Agent error:", e)

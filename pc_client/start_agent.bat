@@ -1,20 +1,35 @@
 @echo off
-title Smart Lab Agent
+title Smart Lab Control System
 
-cd /d E:\SmartLabControlSystem\pc_client
-
-echo Starting Agent...
-
-:: Wait for server.txt
-:wait
-if not exist server.txt (
-    echo Waiting for server...
-    timeout /t 2 > nul
-    goto wait
+:: 🔐 Request Admin Permission
+net session >nul 2>&1
+if %errorLevel% NEQ 0 (
+    echo Requesting Administrator permission...
+    powershell -Command "Start-Process cmd -ArgumentList '/c %~s0' -Verb runAs"
+    exit
 )
 
-:: Run agent
-start /min python agent.py
+cd /d %~dp0
 
-echo Agent started successfully!
-exit
+echo ===============================
+echo   SMART LAB CONTROL STARTING
+echo ===============================
+
+:: Check Python
+python --version >nul 2>&1
+if %errorLevel% NEQ 0 (
+    echo ❌ Python not installed!
+    pause
+    exit
+)
+
+:: Run Agent
+echo Starting Agent...
+start "" python agent.py
+
+echo.
+echo ✅ Lab System Running Successfully
+echo You can now use the PC
+echo.
+
+pause

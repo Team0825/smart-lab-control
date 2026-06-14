@@ -3,6 +3,16 @@ from django.urls import path
 from monitoring import views
 
 urlpatterns = [
+    path('students/', views.student_list),
+    path('students/add/', views.add_student),
+    path('students/edit/<int:id>', views.edit_student),
+    path('students/delete/<int:id>/', views.delete_student),
+    path('create-session/', views.create_session),
+    path('check-session/', views.check_session),
+    path('sessions/', views.session_list),
+    path('attendance/', views.attendance_report),
+    
+    path('sessions/end/<int:id>/', views.end_session),
 
     path('admin/', admin.site.urls),
 
