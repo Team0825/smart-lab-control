@@ -1,0 +1,45 @@
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django Database
+db.sqlite3
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# VS Code
+.vscode/
+
+# Build Files
+build/
+dist/
+
+# Logs
+*.log
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Python Environment Files
+.env
+
+# PyInstaller
+*.spec
+
+# Static Collection
+staticfiles/
+
+# Python Cache Folders
+**/__pycache__/
+
+# Render
+.render
+
+# Temporary Files
+*.tmp
+*.bak
