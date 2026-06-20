@@ -7,7 +7,7 @@ from .models import (Student,
                      Session,
                      Command
                      )
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import logout
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import csrf_exempt
@@ -267,12 +267,8 @@ def student_login(request):
                 session=session
             )
 
-            return render(
-                request,
-                "success.html",
-                {
-                    "student": student
-                }
+            return HttpResponse(
+                f"SUCCESS PAGE REACHED : {student.name}"
             )
         except Exception as e:
             return render(
