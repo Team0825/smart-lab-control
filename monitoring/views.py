@@ -208,9 +208,9 @@ def student_login(request):
             if already_logged:
                 return render(
                     request,
-                    "login.html",
+                    "success.html",
                     {
-                        "error": "Already logged in"
+                        "student": student
                     }
                 )
 
