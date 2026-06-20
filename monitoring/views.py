@@ -13,8 +13,6 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from datetime import timedelta
-
-from .models import Student, LoginRecord, AllowedWebsite, BlockedWebsite, PC, Session
 import random
 import json
 import socket
@@ -249,18 +247,13 @@ def student_login(request):
                     "student": student
                 }
             )
-
         except Exception as e:
-            print("LOGIN ERROR:", e)
+            return JsonResponse({
+                
+                "error": str(e)
+            })
 
-            return render(
-                request,
-                "login.html",
-                {
-                    "error": "Invalid details"
-                }
-            )
-
+              
     return render(request, "login.html")
 # ==========================
 # ADMIN PANEL
@@ -281,11 +274,6 @@ def admin_panel(request):
         "qr": base64.b64encode(buffer.getvalue()).decode()
     })
 
-
-# ==========================
-# DASHBOARD (FIXED)
-# ==========================
-from django.utils import timezone
 
 @staff_member_required(login_url="/admin/login/")
 def admin_dashboard(request):
@@ -382,19 +370,50 @@ def set_command(request):
     pc = request.GET.get("pc")
     cmd = request.GET.get("cmd")
 
-    # 🔥 BROADCAST MODE
+    if not pc or not cmd:
+        return JsonResponse(
+            {"error": "Missing pc or cmd"},
+            status=400
+        )
+
     if pc == "ALL":
         all_pcs = PC.objects.all()
         for p in all_pcs:
-            commands[p.name] = cmd
+            Command.objects.create(
+                pc_name=p.name,
+                command=cmd
+            )
     else:
-        commands[pc] = cmd
+        Command.objects.create(
+            pc_name=pc,
+            command=cmd
+        )
 
     return JsonResponse({"status": "ok"})
 
 def get_command(request):
     pc = request.GET.get("pc")
-    return JsonResponse({"command": commands.get(pc, "none")})
+
+    if not pc:
+        return JsonResponse(
+            {"error": "Missing pc"},
+            status=400
+        )
+
+    command = (
+        Command.objects
+        .filter(pc_name=pc, executed=False)
+        .order_by("created_at")
+        .first()
+    )
+
+    if command is None:
+        return JsonResponse({"command": "none"})
+
+    command.executed = True
+    command.save(update_fields=["executed"])
+
+    return JsonResponse({"command": command.command})
 
 
 # ==========================
