@@ -177,18 +177,45 @@ def student_login(request):
 
     if request.method == "POST":
 
-        reg = request.POST.get("registration")
-        session_code = request.POST.get("session_code")
+        reg = request.POST.get("registration", "").strip()
+        session_code = request.POST.get("session_code", "").strip()
+
+        if not reg or not session_code:
+            return render(
+                request,
+                "login.html",
+                {
+                    "error": "Registration number and session code are required"
+                }
+            )
 
         try:
             student = Student.objects.get(
-                registration_number=reg
+                registration_number__iexact=reg
+            )
+        except Student.DoesNotExist:
+            return render(
+                request,
+                "login.html",
+                {
+                    "error": "Invalid registration number"
+                }
             )
 
+        try:
             session = Session.objects.get(
                 code=session_code
             )
+        except Session.DoesNotExist:
+            return render(
+                request,
+                "login.html",
+                {
+                    "error": "Invalid session code"
+                }
+            )
 
+        try:
             # Session active check
             if not session.is_active():
                 return render(
@@ -248,10 +275,13 @@ def student_login(request):
                 }
             )
         except Exception as e:
-            return JsonResponse({
-                
-                "error": str(e)
-            })
+            return render(
+                request,
+                "login.html",
+                {
+                    "error": str(e)
+                }
+            )
 
               
     return render(request, "login.html")
