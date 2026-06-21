@@ -63,43 +63,24 @@ color:#222;
 
 .login-container p{
 font-size:14px;
-margin-bottom:35px;
+margin-bottom:30px;
 color:#444;
 }
 
 /* INPUT */
 
 .input-group{
-position:relative;
-margin-bottom:35px;
+margin-bottom:20px;
 }
 
 .input-group input{
 width:100%;
-padding:10px 0;
+padding:12px;
 border:none;
 border-bottom:2px solid #444;
 background:transparent;
 outline:none;
 font-size:16px;
-}
-
-.input-group label{
-position:absolute;
-left:0;
-top:10px;
-color:#555;
-transition:0.3s;
-pointer-events:none;
-}
-
-/* FLOAT LABEL */
-
-.input-group input:focus ~ label,
-.input-group input:valid ~ label{
-top:-15px;
-font-size:12px;
-color:#000;
 }
 
 /* BUTTON */
@@ -114,6 +95,8 @@ color:white;
 font-weight:bold;
 cursor:pointer;
 transition:0.3s;
+font-size:15px;
+margin-top:10px;
 }
 
 .login-btn:hover{
@@ -125,6 +108,18 @@ background:#333;
 .error{
 color:red;
 margin-top:15px;
+font-weight:bold;
+}
+
+/* MOBILE */
+
+@media(max-width:480px){
+
+.login-container{
+width:90%;
+padding:30px;
+}
+
 }
 
 </style>
@@ -133,30 +128,48 @@ margin-top:15px;
 <body>
 
 <!-- ADMIN LOGIN ICON -->
+
 <a href="/admin-panel/" class="admin">
-<span class="material-symbols-outlined">admin_panel_settings</span>
+<span class="material-symbols-outlined">
+admin_panel_settings
+</span>
 </a>
 
 <div class="login-container">
 
 <h2>Welcome</h2>
-<p>Enter your Registration Number</p>
+<p>Enter your Registration Number & Session Code</p>
 
 <form method="POST">
+
 {% csrf_token %}
 
-
 <div class="input-group">
-<input name="registration" placeholder="Registration Number">
-<input name="session_code" placeholder="Session Code">
-<button type="submit">Login</button>
+<input
+type="text"
+name="registration"
+placeholder="Registration Number"
+required>
 </div>
 
+<div class="input-group">
+<input
+type="text"
+name="session_code"
+placeholder="Session Code"
+required>
+</div>
+
+<button
+type="submit"
+class="login-btn">
+Login
+</button>
 
 </form>
 
 {% if error %}
-<p class="error" role="alert">{{ error }}</p>
+<p class="error">{{ error }}</p>
 {% endif %}
 
 </div>
