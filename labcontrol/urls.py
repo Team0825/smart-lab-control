@@ -13,6 +13,7 @@ urlpatterns = [
     path('attendance/', views.attendance_report),
     
     path('sessions/end/<int:id>/', views.end_session),
+    path("student-panel/", views.student_panel, name="student_panel"),
 
     path('admin/', admin.site.urls),
 

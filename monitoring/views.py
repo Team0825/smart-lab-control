@@ -266,14 +266,12 @@ def student_login(request):
                 ip_address=ip_address,
                 session=session
             )
+            
+            request.session["student_id"] = student.id
+            request.session["session_id"] = session.id
+            
+            return redirect("/student-panel/")
 
-            return render(
-                request,
-                "success.html",
-                {
-                    "student": student
-                }
-            )
         except Exception as e:
             return render(
                 request,
@@ -285,6 +283,46 @@ def student_login(request):
 
               
     return render(request, "login.html")
+
+# ==========================
+# STUDENT Panel Request
+# ==========================
+def student_panel(request):
+
+    student_id = request.session.get("student_id")
+    session_id = request.session.get("session_id")
+
+    if not student_id or not session_id:
+        return redirect("/")
+
+    try:
+        student = Student.objects.get(id=student_id)
+        session = Session.objects.get(id=session_id)
+
+        end_time = session.start_time + timezone.timedelta(
+            minutes=session.duration
+        )
+
+        remaining = int(
+            (end_time - timezone.now()).total_seconds()
+        )
+
+        if remaining < 0:
+            remaining = 0
+
+        return render(
+            request,
+            "student_panel.html",
+            {
+                "student": student,
+                "session": session,
+                "remaining": remaining
+            }
+        )
+
+    except:
+        return redirect("/")
+
 # ==========================
 # ADMIN PANEL
 # ==========================

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login Successful</title>
+<title>Session Started</title>
 
 <style>
 
@@ -28,29 +28,55 @@ backdrop-filter:blur(12px);
 padding:50px;
 border-radius:18px;
 box-shadow:0 20px 40px rgba(0,0,0,0.2);
-width:420px;
+width:450px;
 text-align:center;
 }
 
 .success-container h2{
 font-size:28px;
 color:#222;
-margin-bottom:20px;
+margin-bottom:15px;
 }
 
 .success-container p{
 font-size:18px;
 color:#333;
-margin-bottom:10px;
+margin-bottom:12px;
+}
+
+.status{
+font-size:16px;
+font-weight:bold;
+color:#28a745;
+margin-top:15px;
+}
+
+.redirect{
+margin-top:20px;
+font-size:14px;
+color:#666;
+}
+
+.loader{
+margin:20px auto;
+width:40px;
+height:40px;
+border:4px solid rgba(0,0,0,0.2);
+border-top:4px solid #000;
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
 }
 
 </style>
-</head>
 
-<body>
-
-<div class="success-container">
 <script>
+
+// Session monitoring
 setInterval(() => {
     fetch("/check-session/")
     .then(res => res.json())
@@ -61,12 +87,33 @@ setInterval(() => {
         }
     })
 }, 5000);
+
+// Redirect after 3 seconds
+setTimeout(function(){
+    window.location.href="/student-panel/";
+},3000);
+
 </script>
+
+</head>
+
+<body>
+
+<div class="success-container">
+
 <h2>Welcome {{ student.name }}</h2>
 
-<p>You are successfully logged in.</p>
+<p>Login Successful</p>
 
-<p>You can now start working on your PC.</p>
+<p>Your attendance has been recorded.</p>
+
+<div class="loader"></div>
+
+<p class="status">Session Started Successfully</p>
+
+<p class="redirect">
+Redirecting...
+</p>
 
 </div>
 
