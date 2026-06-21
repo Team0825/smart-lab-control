@@ -325,6 +325,20 @@ onclick="sendCommand('ALL','internet_off')">
 onclick="sendCommand('ALL','internet_on')">
 ✅ Net On All
 </button>
+<button class="btn lock"
+onclick="sendCommand('ALL','shutdown')">
+⏻ Shutdown All
+</button>
+
+<button class="btn unlock"
+onclick="sendCommand('ALL','restart')">
+🔄 Restart All
+</button>
+
+<button class="btn warn"
+onclick="sendCommand('ALL','logoff')">
+🚪 Logoff All
+</button>
 
 </div>
 
@@ -394,6 +408,20 @@ onclick="sendCommand('{{pc.name}}','internet_on')">
 <button class="btn warn"
 onclick="sendCommand('{{pc.name}}','warning')">
 ⚠ Warn
+</button>
+<button class="btn lock"
+onclick="sendCommand('{{pc.name}}','shutdown')">
+⏻ Shutdown
+</button>
+
+<button class="btn unlock"
+onclick="sendCommand('{{pc.name}}','restart')">
+🔄 Restart
+</button>
+
+<button class="btn warn"
+onclick="sendCommand('{{pc.name}}','logoff')">
+🚪 Logoff
 </button>
 
 </td>
@@ -485,6 +513,7 @@ Unblock
 </button>
 
 </li>
+
 
 {% endfor %}
 
