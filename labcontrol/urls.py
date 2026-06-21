@@ -14,7 +14,7 @@ urlpatterns = [
     path('sessions/', views.session_list),
     path('attendance/', views.attendance_report),
   
-    
+    path("login-app/", views.login_app),
     path('sessions/end/<int:id>/', views.end_session),
     path("student-panel/", views.student_panel, name="student_panel"),
     path("send-notice/",views.send_notice),
