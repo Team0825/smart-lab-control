@@ -267,8 +267,12 @@ def student_login(request):
                 session=session
             )
 
-            return HttpResponse(
-                f"SUCCESS PAGE REACHED : {student.name}"
+            return render(
+                request,
+                "success.html",
+                {
+                    "student": student
+                }
             )
         except Exception as e:
             return render(
