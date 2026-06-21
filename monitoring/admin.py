@@ -6,7 +6,8 @@ from .models import (
     Student,
     Session,
     LoginRecord,
-    Command
+    Command,
+    Notice
 )
 
 
@@ -101,3 +102,4 @@ class CommandAdmin(admin.ModelAdmin):
 
 admin.site.register(AllowedWebsite)
 admin.site.register(BlockedWebsite)
+admin.site.register(Notice)

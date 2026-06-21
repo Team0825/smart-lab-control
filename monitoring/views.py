@@ -5,7 +5,8 @@ from .models import (Student,
                      BlockedWebsite,
                      PC,
                      Session,
-                     Command
+                     Command,
+                     Notice
                      )
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import logout
@@ -320,6 +321,21 @@ def student_panel(request):
     except Exception as e:
         return HttpResponse(str(e))
 
+
+def get_notice(request):
+
+    latest_notice = Notice.objects.order_by(
+        "-created_at"
+    ).first()
+
+    if latest_notice:
+        return JsonResponse({
+            "message": latest_notice.message
+        })
+
+    return JsonResponse({
+        "message": "No notices available."
+    })
 # ==========================
 # ADMIN PANEL
 # ==========================

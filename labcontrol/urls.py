@@ -11,6 +11,7 @@ urlpatterns = [
     path('check-session/', views.check_session),
     path('sessions/', views.session_list),
     path('attendance/', views.attendance_report),
+  
     
     path('sessions/end/<int:id>/', views.end_session),
     path("student-panel/", views.student_panel, name="student_panel"),
@@ -33,6 +34,7 @@ urlpatterns = [
 
     path('update-settings/', views.update_settings),
     path('get-settings/', views.get_settings),
+    path('get-notice/', views.get_notice),
 
     path('remove-site/', views.remove_site),
     path('block-site/', views.block_site),

@@ -129,11 +129,27 @@ seconds--;
 
 setInterval(updateTimer,1000);
 
+function loadNotice(){
+
+fetch("/get-notice/")
+.then(res => res.json())
+.then(data => {
+
+document.getElementById(
+"notice-text"
+).innerHTML = data.message;
+
+});
+
+}
+
+setInterval(loadNotice,5000);
+
 </script>
 
 </head>
 
-<body onload="updateTimer()">
+<body onload="updateTimer();loadNotice();">
 
 <div class="panel">
 
@@ -163,10 +179,11 @@ Loading...
 
 <br><br>
 
-No notices available.
+<span id="notice-text">
+Loading...
+</span>
 
 </div>
-
 </div>
 
 </body>

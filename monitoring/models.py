@@ -109,3 +109,10 @@ class Command(models.Model):
 
     def __str__(self):
         return f"{self.pc_name} - {self.command}"
+    
+class Notice(models.Model):
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.message[:50]
