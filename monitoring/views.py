@@ -600,3 +600,13 @@ def unblock_site(request):
 def admin_logout(request):
     logout(request)
     return redirect("/admin-panel/")
+
+# ==========================
+# Vertion Control
+# ==========================
+
+def app_version(request):
+    return JsonResponse({
+        "version": "1.0.0",
+        "download_url": "https://smart-lab-control-1.onrender.com/downloads/SmartLabStudent.exe"
+    })
