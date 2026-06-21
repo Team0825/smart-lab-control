@@ -369,7 +369,7 @@ def student_panel(request):
         student = Student.objects.get(id=student_id)
         session = Session.objects.get(id=session_id)
 
-        end_time = session.start_time + timezone.timedelta(
+        end_time = session.start_time + timedelta(
             minutes=session.duration
         )
 
@@ -412,23 +412,6 @@ def send_notice(request):
 
     return JsonResponse({
         "status":"error"
-    })
-
-
-def get_notice(request):
-
-    notice = Notice.objects.order_by(
-        "-created_at"
-    ).first()
-
-    if notice:
-
-        return JsonResponse({
-            "message": notice.message
-        })
-
-    return JsonResponse({
-        "message": "No notices available."
     })
 
 
