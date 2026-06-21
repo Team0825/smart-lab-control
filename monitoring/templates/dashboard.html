@@ -55,6 +55,20 @@ text-align:center;
 margin-bottom:20px;
 }
 
+.menu{
+text-align:center;
+margin-bottom:25px;
+}
+
+.menu a{
+text-decoration:none;
+}
+
+.menu button{
+margin:5px;
+padding:10px 15px;
+}
+
 table{
 width:100%;
 border-collapse:collapse;
@@ -80,11 +94,26 @@ margin:3px;
 color:white;
 }
 
-.lock{background:#000;}
-.unlock{background:#6f42c1;}
-.off{background:#0d6efd;}
-.on{background:#28a745;}
-.warn{background:#ffc107;color:black;}
+.lock{
+background:#000;
+}
+
+.unlock{
+background:#6f42c1;
+}
+
+.off{
+background:#0d6efd;
+}
+
+.on{
+background:#28a745;
+}
+
+.warn{
+background:#ffc107;
+color:black;
+}
 
 .btn:hover{
 opacity:0.8;
@@ -108,10 +137,21 @@ background:rgba(255,255,255,0.4);
 border-radius:15px;
 }
 
+ul{
+margin-top:10px;
+padding-left:20px;
+}
+
+li{
+margin-top:8px;
+}
+
 @media(max-width:768px){
+
 table{
 font-size:12px;
 }
+
 }
 
 </style>
@@ -119,58 +159,63 @@ font-size:12px;
 <script>
 
 function sendCommand(pc,cmd){
+
 fetch(`/set-command/?pc=${pc}&cmd=${cmd}`)
-.then(()=>location.reload())
-}
-
-function addSite(){
-let site=document.getElementById("site").value
-fetch(`/update-settings/?site=${site}`)
-.then(()=>location.reload())
-}
-
-function removeSite(site){
-fetch(`/remove-site/?site=${site}`)
-.then(()=>location.reload())
-}
-
-function blockSite(){
-let site=document.getElementById("blocksite").value
-fetch(`/block-site/?site=${site}`)
-.then(()=>location.reload())
-}
-
-function unblockSite(site){
-fetch(`/unblock-site/?site=${site}`)
-.then(()=>location.reload())
-}
-
-function sendNotice(){
-
-let msg=document.getElementById("notice").value
-
-if(msg==""){
-alert("Enter Notice")
-return
-}
-
-fetch(`/send-notice/?message=${encodeURIComponent(msg)}`)
 .then(()=>{
-
-alert("Notice Sent Successfully")
-
-document.getElementById("notice").value=""
-
+location.reload()
 })
 
 }
 
+function addSite(){
 
+let site=document.getElementById("site").value
+
+fetch(`/update-settings/?site=${site}`)
+.then(()=>{
+location.reload()
+})
+
+}
+
+function removeSite(site){
+
+fetch(`/remove-site/?site=${site}`)
+.then(()=>{
+location.reload()
+})
+
+}
+
+function blockSite(){
+
+let site=document.getElementById("blocksite").value
+
+fetch(`/block-site/?site=${site}`)
+.then(()=>{
+location.reload()
+})
+
+}
+
+function unblockSite(site){
+
+fetch(`/unblock-site/?site=${site}`)
+.then(()=>{
+location.reload()
+})
+
+}
 
 function sendNotice(){
 
 let msg =
 document.getElementById("notice").value;
+
+if(msg==""){
+alert("Enter Notice");
+return;
+}
 
 fetch("/send-notice/",{
 
@@ -184,6 +229,7 @@ headers:{
 body:"message="+encodeURIComponent(msg)
 
 })
+
 .then(()=>{
 
 alert("Notice Sent Successfully");
@@ -194,7 +240,6 @@ document.getElementById("notice").value="";
 
 }
 
-
 </script>
 
 </head>
@@ -202,17 +247,64 @@ document.getElementById("notice").value="";
 <body>
 
 <div class="logout-box">
+
 <a href="/logout/">
-<button class="logout">Logout</button>
+<button class="logout">
+Logout
+</button>
 </a>
+
 </div>
 
 <div class="container">
 
+<div class="menu">
+
+<a href="/dashboard/">
+<button class="btn on">
+🏠 Dashboard
+</button>
+</a>
+
+<a href="/create-session/">
+<button class="btn unlock">
+📚 Create Session
+</button>
+</a>
+
+<a href="/sessions/">
+<button class="btn unlock">
+📖 Sessions
+</button>
+</a>
+
+<a href="/attendance/">
+<button class="btn warn">
+📋 Attendance
+</button>
+</a>
+
+<a href="/students/">
+<button class="btn off">
+👨‍🎓 Students
+</button>
+</a>
+
+<a href="/logout/">
+<button class="btn lock">
+🚪 Logout
+</button>
+</a>
+
+</div>
+
 <h2>Smart Lab Control Dashboard</h2>
 
 <div style="margin-bottom:20px;text-align:center;">
-<h3>Universal Control</h3>
+
+<h3>🔥 Universal Control</h3>
+
+<br>
 
 <button class="btn lock"
 onclick="sendCommand('ALL','lock')">
@@ -256,15 +348,21 @@ onclick="sendCommand('ALL','internet_on')">
 <td>{{ pc.ip }}</td>
 
 <td>
+
 {% if pc.status == "online" %}
+
 <span style="color:green;font-weight:bold;">
 ● Online
 </span>
+
 {% else %}
+
 <span style="color:red;font-weight:bold;">
 ● Offline
 </span>
+
 {% endif %}
+
 </td>
 
 <td>{{ pc.student }}</td>
@@ -312,8 +410,6 @@ onclick="sendCommand('{{pc.name}}','warning')">
 
 <br>
 
-<h3>📢 Send Notice To Students</h3>
-
 <input
 id="notice"
 placeholder="Enter Notice Here"
@@ -330,21 +426,33 @@ Send Notice
 
 <h3>Add Allowed Website</h3>
 
-<input id="site" placeholder="example.com">
+<br>
+
+<input
+id="site"
+placeholder="example.com"
+>
 
 <button onclick="addSite()">
 Add
 </button>
 
 <ul>
+
 {% for site in allowed_sites %}
+
 <li>
+
 {{ site }}
+
 <button onclick="removeSite('{{site}}')">
 Remove
 </button>
+
 </li>
+
 {% endfor %}
+
 </ul>
 
 </div>
@@ -353,21 +461,33 @@ Remove
 
 <h3>Block Website</h3>
 
-<input id="blocksite" placeholder="example.com">
+<br>
+
+<input
+id="blocksite"
+placeholder="example.com"
+>
 
 <button onclick="blockSite()">
 Block
 </button>
 
 <ul>
+
 {% for site in blocked_sites %}
+
 <li>
+
 {{ site }}
+
 <button onclick="unblockSite('{{site}}')">
 Unblock
 </button>
+
 </li>
+
 {% endfor %}
+
 </ul>
 
 </div>
@@ -375,4 +495,5 @@ Unblock
 </div>
 
 </body>
+
 </html>
