@@ -85,9 +85,9 @@ def login_api(request):
 
     except Exception as e:
 
-    print("LOGIN API ERROR:", e)
+        print("LOGIN API ERROR:", e)
 
-    return JsonResponse({
+        return JsonResponse({
         "success": False,
         "message": str(e)
     })
