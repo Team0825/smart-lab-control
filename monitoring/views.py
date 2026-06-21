@@ -231,15 +231,12 @@ def student_login(request):
                 student=student,
                 session=session
             ).exists()
-
+            
             if already_logged:
-                return render(
-                    request,
-                    "success.html",
-                    {
-                        "student": student
-                    }
-                )
+                request.session["student_id"] = student.id
+                request.session["session_id"] = session.id
+                
+                return redirect("/student-panel/")
 
             # PC details
             pc_name = socket.gethostname()
@@ -320,8 +317,8 @@ def student_panel(request):
             }
         )
 
-    except:
-        return redirect("/")
+    except Exception as e:
+        return HttpResponse(str(e))
 
 # ==========================
 # ADMIN PANEL
@@ -364,7 +361,7 @@ def admin_dashboard(request):
             else:
                 session_name = "-"
 
-        except:
+        except Exception as e:
             student_name = "-"
             session_name = "-"
 
