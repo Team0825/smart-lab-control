@@ -324,21 +324,40 @@ def student_panel(request):
 @csrf_exempt
 def send_notice(request):
 
-    message = request.GET.get("message")
+    if request.method == "POST":
 
-    if message:
+        message = request.POST.get("message","").strip()
 
-        Notice.objects.create(
-            message=message
-        )
+        if message:
+
+            Notice.objects.create(
+                message=message
+            )
 
         return JsonResponse({
-            "status": "sent"
+            "status":"ok"
         })
 
     return JsonResponse({
-        "status": "error"
-    })    
+        "status":"error"
+    })
+
+
+def get_notice(request):
+
+    notice = Notice.objects.order_by(
+        "-created_at"
+    ).first()
+
+    if notice:
+
+        return JsonResponse({
+            "message": notice.message
+        })
+
+    return JsonResponse({
+        "message": "No notices available."
+    })
 
 
 def get_notice(request):

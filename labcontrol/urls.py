@@ -15,6 +15,8 @@ urlpatterns = [
     
     path('sessions/end/<int:id>/', views.end_session),
     path("student-panel/", views.student_panel, name="student_panel"),
+    path("send-notice/",views.send_notice),
+    path("get-notice/", views.get_notice),
 
     path('admin/', admin.site.urls),
 

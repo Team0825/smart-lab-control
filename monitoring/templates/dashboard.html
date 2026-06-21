@@ -165,6 +165,36 @@ document.getElementById("notice").value=""
 
 }
 
+
+
+function sendNotice(){
+
+let msg =
+document.getElementById("notice").value;
+
+fetch("/send-notice/",{
+
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/x-www-form-urlencoded"
+},
+
+body:"message="+encodeURIComponent(msg)
+
+})
+.then(()=>{
+
+alert("Notice Sent Successfully");
+
+document.getElementById("notice").value="";
+
+});
+
+}
+
+
 </script>
 
 </head>
@@ -182,7 +212,7 @@ document.getElementById("notice").value=""
 <h2>Smart Lab Control Dashboard</h2>
 
 <div style="margin-bottom:20px;text-align:center;">
-<h3>🔥 Global Control</h3>
+<h3>Universal Control</h3>
 
 <button class="btn lock"
 onclick="sendCommand('ALL','lock')">
@@ -282,10 +312,13 @@ onclick="sendCommand('{{pc.name}}','warning')">
 
 <br>
 
+<h3>📢 Send Notice To Students</h3>
+
 <input
 id="notice"
 placeholder="Enter Notice Here"
-style="width:350px;">
+style="width:300px;"
+>
 
 <button onclick="sendNotice()">
 Send Notice
