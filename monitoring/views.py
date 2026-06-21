@@ -21,6 +21,78 @@ import qrcode
 import base64
 from io import BytesIO
 
+# ==========================
+# API
+# ==========================
+
+@csrf_exempt
+def login_api(request):
+
+    if request.method != "POST":
+        return JsonResponse({
+            "success": False
+        })
+
+    reg = request.POST.get("registration")
+    code = request.POST.get("session_code")
+
+    try:
+
+        student = Student.objects.get(
+            registration_number=reg
+        )
+
+        session = Session.objects.get(
+            code=code
+        )
+
+        if not session.is_active():
+
+            return JsonResponse({
+                "success": False,
+                "message": "Session Expired"
+            })
+
+        request.session["student_id"] = student.id
+        request.session["session_id"] = session.id
+
+        end_time = (
+            session.start_time +
+            timedelta(
+                minutes=session.duration
+            )
+        )
+
+        remaining = int(
+            (end_time - timezone.now())
+            .total_seconds()
+        )
+
+        return JsonResponse({
+
+            "success": True,
+
+            "student":
+            student.name,
+
+            "session":
+            session.title,
+
+            "remaining":
+            remaining
+
+        })
+
+    except Exception as e:
+
+        return JsonResponse({
+
+            "success": False,
+
+            "message":
+            str(e)
+
+        })
 
 # ==========================
 # SESSATION CREATION
