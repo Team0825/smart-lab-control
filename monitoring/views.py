@@ -85,14 +85,12 @@ def login_api(request):
 
     except Exception as e:
 
-        return JsonResponse({
+    print("LOGIN API ERROR:", e)
 
-            "success": False,
-
-            "message":
-            str(e)
-
-        })
+    return JsonResponse({
+        "success": False,
+        "message": str(e)
+    })
 
 # ==========================
 # SESSATION CREATION
