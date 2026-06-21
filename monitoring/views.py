@@ -320,6 +320,25 @@ def student_panel(request):
 
     except Exception as e:
         return HttpResponse(str(e))
+    
+@csrf_exempt
+def send_notice(request):
+
+    message = request.GET.get("message")
+
+    if message:
+
+        Notice.objects.create(
+            message=message
+        )
+
+        return JsonResponse({
+            "status": "sent"
+        })
+
+    return JsonResponse({
+        "status": "error"
+    })    
 
 
 def get_notice(request):

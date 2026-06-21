@@ -34,6 +34,7 @@ urlpatterns = [
 
     path('update-settings/', views.update_settings),
     path('get-settings/', views.get_settings),
+    path('sent-notice/',views.send_notice),
     path('get-notice/', views.get_notice),
 
     path('remove-site/', views.remove_site),

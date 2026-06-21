@@ -101,6 +101,13 @@ border-radius:10px;
 margin-right:10px;
 }
 
+.notice-box{
+margin-top:25px;
+padding:20px;
+background:rgba(255,255,255,0.4);
+border-radius:15px;
+}
+
 @media(max-width:768px){
 table{
 font-size:12px;
@@ -136,6 +143,26 @@ fetch(`/block-site/?site=${site}`)
 function unblockSite(site){
 fetch(`/unblock-site/?site=${site}`)
 .then(()=>location.reload())
+}
+
+function sendNotice(){
+
+let msg=document.getElementById("notice").value
+
+if(msg==""){
+alert("Enter Notice")
+return
+}
+
+fetch(`/send-notice/?message=${encodeURIComponent(msg)}`)
+.then(()=>{
+
+alert("Notice Sent Successfully")
+
+document.getElementById("notice").value=""
+
+})
+
 }
 
 </script>
@@ -248,6 +275,23 @@ onclick="sendCommand('{{pc.name}}','warning')">
 {% endfor %}
 
 </table>
+
+<div class="notice-box">
+
+<h3>📢 Send Notice To Students</h3>
+
+<br>
+
+<input
+id="notice"
+placeholder="Enter Notice Here"
+style="width:350px;">
+
+<button onclick="sendNotice()">
+Send Notice
+</button>
+
+</div>
 
 <div class="section">
 
