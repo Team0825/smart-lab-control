@@ -19,6 +19,8 @@ import json
 import socket
 import qrcode
 import base64
+import openpyxl
+from django.contrib import messages
 from io import BytesIO
 
 # ==========================
@@ -185,6 +187,51 @@ def attendance_report(request):
         {
             "records": records
         }
+    )    
+# ==========================
+# STUDENT IMPORT
+# ==========================
+@staff_member_required
+def import_students(request):
+
+    if request.method == "POST":
+
+        excel_file = request.FILES.get("excel_file")
+
+        wb = openpyxl.load_workbook(excel_file)
+
+        sheet = wb.active
+
+        count = 0
+
+        for row in sheet.iter_rows(min_row=2):
+
+            reg = str(row[0].value).strip()
+            name = str(row[1].value).strip()
+            department = str(row[2].value).strip()
+            semester = str(row[3].value).strip()
+
+            Student.objects.update_or_create(
+
+                registration_number=reg,
+
+                defaults={
+                    "name": name,
+                    "department": department,
+                    "semester": semester
+                }
+            )
+
+            count += 1
+
+        messages.success(
+            request,
+            f"{count} Students Imported"
+        )
+
+    return render(
+        request,
+        "import_students.html"
     )    
 # ==========================
 # STUDENT MANAGEMENT
