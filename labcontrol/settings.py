@@ -1,6 +1,7 @@
 import os
 import dj_database_url
 
+
 """
 Django settings for labcontrol project.
 
@@ -80,12 +81,13 @@ WSGI_APPLICATION = 'labcontrol.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+
+
 DATABASES = {
     "default": dj_database_url.parse(
-        os.environ.get("postgresql://smart_lab_db_p636_user:ZxCS6u0R2flyV0mVCCWge3uat8ps4kti@dpg-d8s1gqojs32c73cjus4g-a.oregon-postgres.render.com/smart_lab_db_p636")
+        "postgresql://smart_lab_db_p636_user:ZxCS6u0R2flyV0mVCCWge3uat8ps4kti@dpg-d8s1gqojs32c73cjus4g-a.oregon-postgres.render.com/smart_lab_db_p636"
     )
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 

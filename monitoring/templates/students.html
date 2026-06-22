@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Students</title>
+
+<style>
+
+body{
+    background:#0f172a;
+    color:white;
+    font-family:Segoe UI;
+    padding:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:12px;
+    border:1px solid #334155;
+}
+
+th{
+    background:#1e293b;
+}
+
+tr:hover{
+    background:#1e293b;
+}
+
+.btn{
+    padding:8px 14px;
+    background:#3b82f6;
+    color:white;
+    text-decoration:none;
+    border-radius:6px;
+}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="top">
+
+<h2>Students Database</h2>
+
+<div>
+
+<a href="/students/add/" class="btn">
+Add Student
+</a>
+
+<a href="/import-students/" class="btn">
+Import Excel
+</a>
+
+</div>
+
+</div>
+
+<table>
+
+<tr>
+<th>Registration</th>
+<th>Name</th>
+<th>Department</th>
+<th>Semester</th>
+<th>Action</th>
+</tr>
+
+{% for student in students %}
+
+<tr>
+
+<td>{{ student.registration_number }}</td>
+<td>{{ student.name }}</td>
+<td>{{ student.department }}</td>
+<td>{{ student.semester }}</td>
+
+<td>
+
+<a href="/students/edit/{{ student.id }}" class="btn">
+Edit
+</a>
+
+<a href="/students/delete/{{ student.id }}/" class="btn">
+Delete
+</a>
+
+</td>
+ 
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>
