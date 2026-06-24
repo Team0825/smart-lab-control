@@ -1,19 +1,188 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Sessions</title>
+
+<title>Session Management</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+padding:30px;
+min-height:100vh;
+}
+
+.container{
+background:white;
+border-radius:20px;
+padding:25px;
+box-shadow:0 20px 40px rgba(0,0,0,0.25);
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+margin-bottom:25px;
+gap:10px;
+}
+
+.header h2{
+color:#0f172a;
+}
+
+.btn{
+padding:10px 16px;
+background:#2563eb;
+color:white;
+text-decoration:none;
+border-radius:8px;
+font-weight:600;
+display:inline-block;
+}
+
+.btn:hover{
+background:#1d4ed8;
+}
+
+.btn-danger{
+background:#dc2626;
+}
+
+.btn-danger:hover{
+background:#b91c1c;
+}
+
+.back{
+background:#0f172a;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-bottom:25px;
+}
+
+.card{
+background:#f8fafc;
+padding:20px;
+border-radius:12px;
+border-left:5px solid #2563eb;
+text-align:center;
+}
+
+.card h3{
+font-size:28px;
+color:#2563eb;
+}
+
+.card p{
+color:#64748b;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+background:#1e293b;
+color:white;
+}
+
+th,td{
+padding:12px;
+text-align:center;
+border:1px solid #e2e8f0;
+}
+
+tr:nth-child(even){
+background:#f8fafc;
+}
+
+tr:hover{
+background:#e0f2fe;
+}
+
+.active{
+color:green;
+font-weight:bold;
+}
+
+.ended{
+color:red;
+font-weight:bold;
+}
+
+@media(max-width:768px){
+
+table{
+font-size:12px;
+}
+
+th,td{
+padding:8px;
+}
+
+}
+
+</style>
+
 </head>
+
 <body>
 
-<h2>Session Management</h2>
+<div class="container">
 
-<a href="/create-session/">Create Session</a>
+<div class="header">
 
-<table border="1">
+<h2>📚 Session Management</h2>
+
+<div>
+
+<a href="/dashboard/" class="btn back">
+🏠 Dashboard
+</a>
+
+<a href="/create-session/" class="btn">
+➕ Create Session
+</a>
+
+</div>
+
+</div>
+
+<div class="stats">
+
+<div class="card">
+<h3>{{ sessions|length }}</h3>
+<p>Total Sessions</p>
+</div>
+
+<div class="card">
+<h3>Live</h3>
+<p>Session Monitoring</p>
+</div>
+
+</div>
+
+<table>
 
 <tr>
 <th>Title</th>
-<th>Code</th>
+<th>Session Code</th>
 <th>Duration</th>
 <th>Status</th>
 <th>Action</th>
@@ -24,15 +193,29 @@
 <tr>
 
 <td>{{ s.title }}</td>
-<td>{{ s.code }}</td>
-<td>{{ s.duration }} Min</td>
+
+<td>
+<b>{{ s.code }}</b>
+</td>
+
+<td>
+{{ s.duration }} Minutes
+</td>
 
 <td>
 
 {% if s.active %}
-Active
+
+<span class="active">
+🟢 Active
+</span>
+
 {% else %}
-Ended
+
+<span class="ended">
+🔴 Ended
+</span>
+
 {% endif %}
 
 </td>
@@ -40,9 +223,16 @@ Ended
 <td>
 
 {% if s.active %}
-<a href="/sessions/end/{{s.id}}/">
+
+<a href="/sessions/end/{{s.id}}/"
+class="btn btn-danger">
 End Session
 </a>
+
+{% else %}
+
+Completed
+
 {% endif %}
 
 </td>
@@ -52,6 +242,8 @@ End Session
 {% endfor %}
 
 </table>
+
+</div>
 
 </body>
 </html>

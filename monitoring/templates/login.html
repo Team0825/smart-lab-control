@@ -1,9 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Lab Login</title>
+<title>Smart Lab Control System</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
@@ -13,61 +15,102 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+font-family:'Segoe UI',sans-serif;
 }
 
 body{
+height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
-background:linear-gradient(90deg,#fff7ad,#ffa9f9);
-position:relative;
+background:linear-gradient(135deg,#fff7ad,#ffc8f8);
+overflow:hidden;
 }
 
-/* ADMIN ICON */
+/* ADMIN BUTTON */
 
 .admin{
 position:absolute;
 top:20px;
-right:25px;
-font-size:28px;
-color:black;
+right:20px;
+background:white;
+padding:10px;
+border-radius:50%;
+box-shadow:0 5px 15px rgba(0,0,0,0.15);
 text-decoration:none;
+color:#222;
 transition:0.3s;
 }
 
 .admin:hover{
-transform:scale(1.2);
+transform:scale(1.1);
 }
 
-/* LOGIN BOX */
+/* MAIN LAYOUT */
 
-.login-container{
-background:rgba(255,255,255,0.35);
-backdrop-filter:blur(12px);
-padding:50px;
-border-radius:18px;
-box-shadow:0 20px 40px rgba(0,0,0,0.2);
-width:380px;
+.main-container{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:70px;
+flex-wrap:wrap;
+padding:20px;
+}
+
+/* LEFT SIDE */
+
+.logo-section{
+width:350px;
 text-align:center;
 }
 
-/* TEXT */
+.logo-section img{
+width:90px;
+height:90px;
+margin-bottom:15px;
+}
+
+.logo-section h1{
+font-size:42px;
+font-weight:700;
+color:#222;
+}
+
+.logo-section h3{
+letter-spacing:4px;
+margin-bottom:15px;
+color:#333;
+}
+
+.logo-section p{
+font-size:13px;
+color:#444;
+line-height:1.5;
+}
+
+/* LOGIN CARD */
+
+.login-container{
+background:rgba(255,255,255,0.55);
+backdrop-filter:blur(12px);
+padding:40px;
+border-radius:20px;
+width:360px;
+box-shadow:0 15px 35px rgba(0,0,0,0.15);
+}
 
 .login-container h2{
-font-size:28px;
+text-align:center;
 margin-bottom:10px;
 color:#222;
 }
 
 .login-container p{
+text-align:center;
+margin-bottom:25px;
 font-size:14px;
-margin-bottom:30px;
-color:#444;
+color:#555;
 }
-
-/* INPUT */
 
 .input-group{
 margin-bottom:20px;
@@ -80,44 +123,58 @@ border:none;
 border-bottom:2px solid #444;
 background:transparent;
 outline:none;
-font-size:16px;
+font-size:15px;
 }
-
-/* BUTTON */
 
 .login-btn{
 width:100%;
 padding:12px;
 border:none;
-border-radius:25px;
-background:#000;
+border-radius:30px;
+background:#1e293b;
 color:white;
+font-size:15px;
 font-weight:bold;
 cursor:pointer;
 transition:0.3s;
-font-size:15px;
-margin-top:10px;
 }
 
 .login-btn:hover{
-background:#333;
+background:#0f172a;
 }
-
-/* ERROR */
 
 .error{
 color:red;
+text-align:center;
 margin-top:15px;
 font-weight:bold;
 }
 
-/* MOBILE */
+.footer{
+text-align:center;
+font-size:11px;
+margin-top:20px;
+color:#666;
+}
 
-@media(max-width:480px){
+@media(max-width:768px){
+
+.main-container{
+flex-direction:column;
+gap:20px;
+}
+
+.logo-section{
+width:90%;
+}
+
+.logo-section h1{
+font-size:32px;
+}
 
 .login-container{
-width:90%;
-padding:30px;
+width:95%;
+max-width:360px;
 }
 
 }
@@ -127,7 +184,7 @@ padding:30px;
 
 <body>
 
-<!-- ADMIN LOGIN ICON -->
+<!-- ADMIN ICON -->
 
 <a href="/admin-panel/" class="admin">
 <span class="material-symbols-outlined">
@@ -135,10 +192,42 @@ admin_panel_settings
 </span>
 </a>
 
+<div class="main-container">
+
+<!-- LEFT SECTION -->
+
+<div class="logo-section">
+
+<img src="{% static 'images/sgp_logo.png' %}" alt="SGP Logo">
+
+<h1>SMART LAB</h1>
+
+<h3>CONTROL SYSTEM</h3>
+
+<p>
+West Bengal State Council of Technical &
+Vocational Education and Skill Development
+</p>
+
+<p>
+Department of Computer Science & Technology
+</p>
+
+<p>
+Siliguri Government Polytechnic
+</p>
+
+</div>
+
+<!-- LOGIN SECTION -->
+
 <div class="login-container">
 
-<h2>Welcome</h2>
-<p>Enter your Registration Number & Session Code</p>
+<h2>Student Login</h2>
+
+<p>
+Enter your Registration Number & Session Code
+</p>
 
 <form method="POST">
 
@@ -160,9 +249,7 @@ placeholder="Session Code"
 required>
 </div>
 
-<button
-type="submit"
-class="login-btn">
+<button type="submit" class="login-btn">
 Login
 </button>
 
@@ -171,6 +258,12 @@ Login
 {% if error %}
 <p class="error">{{ error }}</p>
 {% endif %}
+
+<div class="footer">
+Version 1.0 | Smart Lab Control System
+</div>
+
+</div>
 
 </div>
 

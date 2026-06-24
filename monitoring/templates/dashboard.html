@@ -16,7 +16,14 @@ font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
 }
 
 body{
-background:linear-gradient(90deg,#fff7ad,#ffa9f9);
+background:
+linear-gradient(
+135deg,
+#0f172a,
+#1e3a8a,
+#2563eb
+);
+
 padding:40px;
 overflow-x:hidden;
 }
@@ -43,7 +50,7 @@ background:#b30000;
 }
 
 .container{
-background:rgba(255,255,255,0.35);
+background:white;
 backdrop-filter:blur(12px);
 padding:30px;
 border-radius:18px;
@@ -152,6 +159,30 @@ table{
 font-size:12px;
 }
 
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+margin-bottom:25px;
+}
+
+.card{
+background:rgba(255,255,255,0.45);
+padding:20px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.card h3{
+font-size:28px;
+margin-bottom:5px;
+}
+
+.card p{
+font-size:14px;
 }
 
 </style>
@@ -299,10 +330,33 @@ Logout
 </div>
 
 <h2>Smart Lab Control Dashboard</h2>
+<div class="stats">
+
+<div class="card">
+<h3>{{ pcs|length }}</h3>
+<p>Total PCs</p>
+</div>
+
+<div class="card">
+<h3>{{ allowed_sites|length }}</h3>
+<p>Allowed Sites</p>
+</div>
+
+<div class="card">
+<h3>{{ blocked_sites|length }}</h3>
+<p>Blocked Sites</p>
+</div>
+
+<div class="card">
+<h3>Live</h3>
+<p>System Status</p>
+</div>
+
+</div>
 
 <div style="margin-bottom:20px;text-align:center;">
 
-<h3>🔥 Universal Control</h3>
+<h3>All Pcs Control</h3>
 
 <br>
 

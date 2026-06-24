@@ -1,47 +1,139 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Students</title>
+
+<title>Students Database</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
 body{
-    background:#0f172a;
-    color:white;
-    font-family:Segoe UI;
-    padding:20px;
+background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+padding:30px;
+min-height:100vh;
 }
 
-table{
-    width:100%;
-    border-collapse:collapse;
+.container{
+background:white;
+border-radius:20px;
+padding:25px;
+box-shadow:0 20px 40px rgba(0,0,0,0.25);
 }
 
-th,td{
-    padding:12px;
-    border:1px solid #334155;
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:10px;
+margin-bottom:25px;
 }
 
-th{
-    background:#1e293b;
-}
-
-tr:hover{
-    background:#1e293b;
+.header h2{
+color:#0f172a;
 }
 
 .btn{
-    padding:8px 14px;
-    background:#3b82f6;
-    color:white;
-    text-decoration:none;
-    border-radius:6px;
+padding:10px 16px;
+background:#2563eb;
+color:white;
+text-decoration:none;
+border-radius:8px;
+font-weight:600;
+display:inline-block;
 }
 
-.top{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:20px;
+.btn:hover{
+background:#1d4ed8;
+}
+
+.btn-danger{
+background:#dc2626;
+}
+
+.btn-danger:hover{
+background:#b91c1c;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+th{
+background:#1e293b;
+color:white;
+}
+
+th,td{
+padding:12px;
+text-align:center;
+border:1px solid #e2e8f0;
+}
+
+tr:nth-child(even){
+background:#f8fafc;
+}
+
+tr:hover{
+background:#e0f2fe;
+}
+
+.action-buttons{
+display:flex;
+justify-content:center;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-bottom:20px;
+}
+
+.card{
+background:#f8fafc;
+padding:20px;
+border-radius:12px;
+text-align:center;
+border-left:5px solid #2563eb;
+}
+
+.card h3{
+font-size:28px;
+color:#2563eb;
+}
+
+.card p{
+color:#64748b;
+}
+
+.back-btn{
+margin-bottom:15px;
+display:inline-block;
+}
+
+@media(max-width:768px){
+
+table{
+font-size:12px;
+}
+
+th,td{
+padding:8px;
+}
+
 }
 
 </style>
@@ -50,20 +142,40 @@ tr:hover{
 
 <body>
 
-<div class="top">
+<a href="/dashboard/" class="btn back-btn">
+🏠 Back To Dashboard
+</a>
 
-<h2>Students Database</h2>
+<div class="container">
+
+<div class="header">
+
+<h2>👨‍🎓 Students Database</h2>
 
 <div>
 
 <a href="/students/add/" class="btn">
-Add Student
+➕ Add Student
 </a>
 
 <a href="/import-students/" class="btn">
-Import Excel
+📊 Import Excel
 </a>
 
+</div>
+
+</div>
+
+<div class="stats">
+
+<div class="card">
+<h3>{{ students|length }}</h3>
+<p>Total Students</p>
+</div>
+
+<div class="card">
+<h3>Active</h3>
+<p>Database Status</p>
 </div>
 
 </div>
@@ -71,7 +183,7 @@ Import Excel
 <table>
 
 <tr>
-<th>Registration</th>
+<th>Registration No</th>
 <th>Name</th>
 <th>Department</th>
 <th>Semester</th>
@@ -83,27 +195,37 @@ Import Excel
 <tr>
 
 <td>{{ student.registration_number }}</td>
+
 <td>{{ student.name }}</td>
+
 <td>{{ student.department }}</td>
+
 <td>{{ student.semester }}</td>
 
 <td>
 
+<div class="action-buttons">
+
 <a href="/students/edit/{{ student.id }}" class="btn">
-Edit
+✏ Edit
 </a>
 
-<a href="/students/delete/{{ student.id }}/" class="btn">
-Delete
+<a href="/students/delete/{{ student.id }}/"
+class="btn btn-danger">
+🗑 Delete
 </a>
+
+</div>
 
 </td>
- 
+
 </tr>
 
 {% endfor %}
 
 </table>
+
+</div>
 
 </body>
 </html>

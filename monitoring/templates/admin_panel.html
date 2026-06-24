@@ -4,7 +4,10 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Control Panel</title>
+
+<title>Smart Lab Administration</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
 <style>
 
@@ -12,76 +15,121 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+font-family:'Segoe UI',sans-serif;
 }
 
 body{
+min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
-background:linear-gradient(90deg,#fff7ad,#ffa9f9);
+background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+padding:20px;
 }
 
-/* PANEL */
+/* MAIN PANEL */
 
 .panel{
-background:rgba(255,255,255,0.35);
-backdrop-filter:blur(12px);
-padding:50px;
-border-radius:18px;
-box-shadow:0 20px 40px rgba(0,0,0,0.2);
-width:420px;
-text-align:center;
-}
-
-/* TITLE */
-
-.panel h2{
-font-size:28px;
-margin-bottom:10px;
-color:#222;
-}
-
-.panel p{
-font-size:14px;
-margin-bottom:20px;
-color:#444;
-}
-
-/* BUTTON */
-
-button{
 width:100%;
-padding:12px;
-border:none;
+max-width:1000px;
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(15px);
 border-radius:25px;
-background:#000;
+padding:40px;
+box-shadow:0 20px 50px rgba(0,0,0,.3);
 color:white;
-font-weight:bold;
-cursor:pointer;
-transition:0.3s;
-margin-top:10px;
 }
 
-button:hover{
-background:#333;
+/* HEADER */
+
+.header{
+text-align:center;
+margin-bottom:35px;
+}
+
+.header h1{
+font-size:38px;
+margin-bottom:10px;
+}
+
+.header p{
+color:#cbd5e1;
+}
+
+/* GRID */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+/* CARD */
+
+.card{
+background:rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.15);
+border-radius:18px;
+padding:25px;
+text-align:center;
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+background:rgba(255,255,255,0.15);
+}
+
+.card span{
+font-size:50px;
+margin-bottom:10px;
+display:block;
+}
+
+.card h3{
+margin-bottom:10px;
+}
+
+.card p{
+font-size:14px;
+color:#cbd5e1;
+margin-bottom:15px;
+}
+
+.btn{
+display:inline-block;
+padding:10px 20px;
+background:#2563eb;
+color:white;
+text-decoration:none;
+border-radius:25px;
+font-weight:bold;
+}
+
+.btn:hover{
+background:#1d4ed8;
 }
 
 /* QR */
 
-.qr{
+.qr-section{
+margin-top:35px;
+text-align:center;
+}
+
+.qr-section img{
+width:180px;
+background:white;
+padding:10px;
+border-radius:15px;
+margin-top:15px;
+}
+
+.footer{
 margin-top:30px;
-}
-
-.qr img{
-width:150px;
-margin-top:10px;
-}
-
-.qr p{
+text-align:center;
 font-size:13px;
-margin-top:8px;
+color:#cbd5e1;
 }
 
 </style>
@@ -92,30 +140,117 @@ margin-top:8px;
 
 <div class="panel">
 
-<h2>Admin Control</h2>
-<p>Select control method</p>
+<div class="header">
 
-<!-- DASHBOARD CONTROL -->
+<h1>SMART LAB CONTROL SYSTEM</h1>
 
-<a href="/dashboard/">
-<button>Open Lab Dashboard</button>
+<p>
+Administrator Control Center
+</p>
+
+</div>
+
+<div class="grid">
+
+<!-- DASHBOARD -->
+
+<div class="card">
+
+<span class="material-symbols-outlined">
+dashboard
+</span>
+
+<h3>Lab Dashboard</h3>
+
+<p>
+Monitor students, sessions, attendance and system activity.
+</p>
+
+<a href="/dashboard/" class="btn">
+Open Dashboard
 </a>
 
-<!-- DJANGO ADMIN -->
+</div>
 
-<a href="/admin/">
-<button>Django Administration</button>
+<!-- ADMIN -->
+
+<div class="card">
+
+<span class="material-symbols-outlined">
+admin_panel_settings
+</span>
+
+<h3>Administration</h3>
+
+<p>
+Manage database, users, permissions and records.
+</p>
+
+<a href="/admin/" class="btn">
+Open Admin
 </a>
 
-<!-- MOBILE CONTROL -->
+</div>
 
-<div class="qr">
+<!-- ATTENDANCE -->
 
-<h3>Mobile Control</h3>
+<div class="card">
+
+<span class="material-symbols-outlined">
+fact_check
+</span>
+
+<h3>Attendance</h3>
+
+<p>
+Track and manage student attendance records.
+</p>
+
+<a href="/attendance/" class="btn">
+Open
+</a>
+
+</div>
+
+<!-- STUDENTS -->
+
+<div class="card">
+
+<span class="material-symbols-outlined">
+groups
+</span>
+
+<h3>Students Database</h3>
+
+<p>
+View and manage registered students.
+</p>
+
+<a href="/students/" class="btn">
+Open
+</a>
+
+</div>
+
+</div>
+
+<div class="qr-section">
+
+<h3>📱 Mobile Control Panel</h3>
 
 <img src="data:image/png;base64,{{ qr }}">
 
-<p>Scan to open mobile control panel</p>
+<p style="margin-top:10px;">
+Scan QR Code to access mobile control panel
+</p>
+
+</div>
+
+<div class="footer">
+
+Smart Lab Control System v1.0<br>
+Department of Computer Science & Technology<br>
+Siliguri Government Polytechnic
 
 </div>
 
