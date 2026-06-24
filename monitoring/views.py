@@ -396,7 +396,10 @@ def student_login(request):
             )
 
               
-    return HttpResponse("Login Page Working")
+    return render(
+        request,
+        "login.html"
+    )
  
 # ==========================
 # STUDENT Panel Request
