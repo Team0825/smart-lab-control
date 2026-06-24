@@ -477,20 +477,11 @@ def get_notice(request):
 # ADMIN PANEL
 # ==========================
 def admin_panel(request):
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    ip = s.getsockname()[0]
-    s.close()
 
-    url = f"http://{ip}:8000/control/"
-
-    qr = qrcode.make(url)
-    buffer = BytesIO()
-    qr.save(buffer, format="PNG")
-
-    return render(request, "admin_panel.html", {
-        "qr": base64.b64encode(buffer.getvalue()).decode()
-    })
+    return render(
+        request,
+        "admin_panel.html"
+    )
 
 
 @staff_member_required(login_url="/admin/login/")
