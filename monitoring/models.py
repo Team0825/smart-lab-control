@@ -28,7 +28,7 @@ class Session(models.Model):
 
 
 class PC(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=255, unique=True)
     ip = models.CharField(max_length=50, default="0.0.0.0")
     status = models.CharField(max_length=20, default="offline")
     last_seen = models.DateTimeField(default=timezone.now)
@@ -78,7 +78,7 @@ class LoginRecord(models.Model):
         blank=True
     )
 
-    pc_name = models.CharField(max_length=50)
+    pc_name = models.CharField(max_length=255)
     ip_address = models.CharField(max_length=20)
 
     login_time = models.DateTimeField(auto_now_add=True)
@@ -97,7 +97,7 @@ class LoginRecord(models.Model):
 # =====================================
 class Command(models.Model):
 
-    pc_name = models.CharField(max_length=100)
+    pc_name = models.CharField(max_length=255)
 
     command = models.CharField(max_length=50)
 

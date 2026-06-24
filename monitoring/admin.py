@@ -1,12 +1,12 @@
 from django.contrib import admin
 from .models import (
-    PC,
-    AllowedWebsite,
-    BlockedWebsite,
     Student,
     Session,
     LoginRecord,
+    PC,
     Command,
+    AllowedWebsite,
+    BlockedWebsite,
     Notice
 )
 
