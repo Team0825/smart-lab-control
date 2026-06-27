@@ -1,78 +1,13 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Session Started</title>
+<link rel="stylesheet" href="{% static 'css/success.css' %}">
+</head>
 
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-}
-
-body{
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-background:linear-gradient(90deg,#fff7ad,#ffa9f9);
-}
-
-.success-container{
-background:rgba(255,255,255,0.35);
-backdrop-filter:blur(12px);
-padding:50px;
-border-radius:18px;
-box-shadow:0 20px 40px rgba(0,0,0,0.2);
-width:450px;
-text-align:center;
-}
-
-.success-container h2{
-font-size:28px;
-color:#222;
-margin-bottom:15px;
-}
-
-.success-container p{
-font-size:18px;
-color:#333;
-margin-bottom:12px;
-}
-
-.status{
-font-size:16px;
-font-weight:bold;
-color:#28a745;
-margin-top:15px;
-}
-
-.redirect{
-margin-top:20px;
-font-size:14px;
-color:#666;
-}
-
-.loader{
-margin:20px auto;
-width:40px;
-height:40px;
-border:4px solid rgba(0,0,0,0.2);
-border-top:4px solid #000;
-border-radius:50%;
-animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
-}
-
-</style>
 
 <script>
 

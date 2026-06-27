@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
 
@@ -7,87 +8,8 @@
 
 <title>Student Session Panel</title>
 
-<style>
+<link rel="stylesheet" href="{% static 'css/student_panel.css' %}">
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-}
-
-body{
-background:linear-gradient(90deg,#fff7ad,#ffa9f9);
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
-.panel{
-
-background:rgba(255,255,255,0.35);
-backdrop-filter:blur(12px);
-
-padding:40px;
-
-border-radius:20px;
-
-width:520px;
-
-text-align:center;
-
-box-shadow:0 20px 40px rgba(0,0,0,0.2);
-}
-
-h2{
-margin-bottom:10px;
-}
-
-.session-name{
-font-size:18px;
-font-weight:bold;
-margin-top:10px;
-}
-
-.timer{
-
-font-size:48px;
-
-font-weight:bold;
-
-margin:20px 0;
-
-color:#000;
-}
-
-.notice{
-
-background:#fff3cd;
-
-padding:15px;
-
-border-radius:10px;
-
-margin-top:20px;
-
-font-weight:bold;
-}
-
-.status{
-
-color:green;
-
-margin-top:10px;
-font-weight:bold;
-}
-
-.info{
-margin-top:10px;
-font-size:16px;
-}
-
-</style>
 
 <script>
 
